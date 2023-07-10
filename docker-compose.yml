@@ -47,9 +47,3 @@ services:
       - POSTGRES_DB=mainBase
       - POSTGRES_USER=art
       - POSTGRES_PASSWORD=pknk
-
-
-
-
-
-
