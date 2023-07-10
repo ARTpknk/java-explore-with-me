@@ -10,17 +10,10 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-
     <artifactId>ewm-stats-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-<dependencies>
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-</dependencies>
     <modules>
         <module>client</module>
         <module>dto</module>
