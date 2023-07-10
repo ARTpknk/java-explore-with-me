@@ -8,7 +8,7 @@ services:
     depends_on:
       - stats-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/statsBase
       - POSTGRES_USER=art
       - POSTGRES_PASSWORD=pknk
 
@@ -18,9 +18,9 @@ services:
     volumes:
       - /var/lib/postgresql/data/
     ports:
-      - "6541:5432"
+      - "6541:5431"
     environment:
-      - POSTGRES_DB=stats-db
+      - POSTGRES_DB=statsBase
       - POSTGRES_USER=art
       - POSTGRES_PASSWORD=pknk
 
@@ -32,7 +32,7 @@ services:
     depends_on:
       - ewm-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/mainBase
       - POSTGRES_USER=art
       - POSTGRES_PASSWORD=pknk
 
@@ -44,6 +44,6 @@ services:
     ports:
       - "6542:5432"
     environment:
-      - POSTGRES_DB=ewm-db
+      - POSTGRES_DB=mainBase
       - POSTGRES_USER=art
       - POSTGRES_PASSWORD=pknk
