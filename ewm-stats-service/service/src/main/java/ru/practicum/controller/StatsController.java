@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.HitDto;
 import ru.practicum.StatsDto;
 import ru.practicum.formatter.DateFormatter;
-import ru.practicum.mapper.statsMapper;
+import ru.practicum.mapper.StatsMapper;
 import ru.practicum.service.StatsService;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class StatsController {
 
     @PostMapping("/hit")
     public void create(@RequestBody HitDto hitDto) {
-        statsService.create(statsMapper.toHit(hitDto));
+        statsService.create(StatsMapper.toHit(hitDto));
     }
 
     @GetMapping("/stats")
@@ -32,7 +32,7 @@ public class StatsController {
                               @RequestParam(defaultValue = "false") Boolean unique) {
         return statsService.get(DateFormatter.toLocalDateTime(start), DateFormatter.toLocalDateTime(end), uris, unique)
                 .stream()
-                .map(statsMapper::toStatsDto)
+                .map(StatsMapper::toStatsDto)
                 .collect(Collectors.toList());
     }
 }

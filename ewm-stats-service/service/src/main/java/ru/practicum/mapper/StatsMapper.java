@@ -8,7 +8,7 @@ import ru.practicum.model.Hit;
 import ru.practicum.model.Stats;
 
 @UtilityClass
-public class statsMapper {
+public class StatsMapper {
 
     public Hit toHit(HitDto hitDto) {
         return Hit.builder()
