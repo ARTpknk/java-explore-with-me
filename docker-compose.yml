@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   stats-service:
-    build: ./ewm-stat-service/stats-server
+    build: ewm-stats-service/service
     container_name: stats-service-container
     ports:
       - "9090:9090"
@@ -25,7 +25,7 @@ services:
       - POSTGRES_PASSWORD=admin
 
   ewm-main-service:
-    build: ./ewm-main-service
+    build: ewm-main-service
     container_name: main-service-container
     ports:
       - "8080:8080"
