@@ -1,0 +1,42 @@
+package ru.practicum.controller.adminApi;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
+import ru.practicum.dto.category.CategoryDto;
+import ru.practicum.exception.ExploreWithMeNotFoundException;
+import ru.practicum.mapper.CategoryMapper;
+import ru.practicum.model.Category;
+import ru.practicum.service.category.CategoryService;
+
+import javax.validation.Valid;
+
+@Slf4j
+@RestController
+@RequestMapping("/admin/categories")
+@RequiredArgsConstructor
+public class AdminCategoryController {
+    private final CategoryService categoryService;
+
+    @PostMapping
+    public CategoryDto createCategory(@Valid @RequestBody CategoryDto categoryDto) {
+        Category category = CategoryMapper.toCategory(categoryDto);
+        return CategoryMapper.toCategoryDto(categoryService.createCategory(category));
+    }
+
+    @DeleteMapping("/{catId}")
+    public void deleteCategoryById(@PathVariable("catId") Long id) {
+        if (categoryService.getCategoryById(id) == null) {
+            throw new ExploreWithMeNotFoundException("Category with Id: " + id + " not found");
+        }
+        categoryService.deleteCategoryById(id);
+    }
+
+    @PatchMapping("/{catId}")
+    public CategoryDto updateCategory(@PathVariable("catId") Long id, @RequestBody CategoryDto categoryDto) {
+
+        Category category = CategoryMapper.toCategory(categoryDto);
+        category.setId(id);
+        return CategoryMapper.toCategoryDto(categoryService.updateCategory(category));
+    }
+}
