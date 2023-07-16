@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.exception.ExploreWithMeNotFoundException;
-import ru.practicum.model.User;
+import ru.practicum.model.user.User;
 import ru.practicum.repository.UserRepository;
 
 import java.util.List;

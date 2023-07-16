@@ -7,7 +7,7 @@ import ru.practicum.dto.user.UserDto;
 import ru.practicum.exception.ExploreWithMeBadRequest;
 import ru.practicum.exception.ExploreWithMeNotFoundException;
 import ru.practicum.mapper.UserMapper;
-import ru.practicum.model.User;
+import ru.practicum.model.user.User;
 import ru.practicum.service.user.UserService;
 
 import javax.validation.Valid;

@@ -1,6 +1,6 @@
 package ru.practicum.service.user;
 
-import ru.practicum.model.User;
+import ru.practicum.model.user.User;
 
 import java.util.List;
 

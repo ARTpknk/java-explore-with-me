@@ -3,7 +3,7 @@ package ru.practicum.mapper;
 import lombok.experimental.UtilityClass;
 import ru.practicum.dto.user.UserDto;
 import ru.practicum.dto.user.UserShortDto;
-import ru.practicum.model.User;
+import ru.practicum.model.user.User;
 
 @UtilityClass
 public class UserMapper {

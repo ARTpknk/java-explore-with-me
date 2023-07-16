@@ -1,6 +1,10 @@
-package ru.practicum.model;
+package ru.practicum.model.event;
 
 import lombok.*;
+import ru.practicum.model.category.Category;
+import ru.practicum.model.state.State;
+import ru.practicum.model.user.User;
+import ru.practicum.model.location.Location;
 
 
 import javax.persistence.*;
@@ -10,12 +14,6 @@ import java.time.LocalDateTime;
 @Table(name = "events")
 @Data
 @Builder
-@NamedEntityGraph(
-        name = "event-category-initiator-graph",
-        attributeNodes = {
-                @NamedAttributeNode(value = "category"),
-                @NamedAttributeNode(value = "initiator")
-        })
 public class Event {
 
     @Id
@@ -29,7 +27,6 @@ public class Event {
     @JoinColumn(name = "category_id")
     Category category;
     @With
-    @Transient
     @Column(name = "confirmed_requests")
     int confirmedRequests;
     @With
@@ -65,7 +62,6 @@ public class Event {
     @Column(name = "title")
     String title;
     @With
-    @Transient
     @Column(name = "views")
     int views;
 

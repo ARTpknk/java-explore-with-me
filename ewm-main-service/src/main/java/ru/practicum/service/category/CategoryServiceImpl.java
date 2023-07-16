@@ -5,9 +5,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.exception.ExploreWithMeAlreadyExistsException;
+import ru.practicum.exception.ExploreWithMeConflictException;
 import ru.practicum.exception.ExploreWithMeNotFoundException;
-import ru.practicum.model.Category;
+import ru.practicum.model.category.Category;
 import ru.practicum.repository.CategoryRepository;
+import ru.practicum.repository.EventRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 @Service
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository repository;
+    private final EventRepository eventRepository;
 
     @Override
     @Transactional
@@ -43,6 +46,12 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategoryById(Long id) {
         //только если нет событий по категории
         //добавить проверку
+        if (getCategoryById(id) == null) {
+            throw new ExploreWithMeNotFoundException("Category with Id: " + id + " not found");
+        }
+        if (!eventRepository.findAllByCategoryId(id).isEmpty()) {
+            throw new ExploreWithMeConflictException("Category with Id: " + id + " has events");
+        }
         repository.deleteById(id);
     }
 

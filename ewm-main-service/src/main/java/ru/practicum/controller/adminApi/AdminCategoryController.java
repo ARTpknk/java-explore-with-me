@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.category.CategoryDto;
-import ru.practicum.exception.ExploreWithMeNotFoundException;
 import ru.practicum.mapper.CategoryMapper;
-import ru.practicum.model.Category;
+import ru.practicum.model.category.Category;
 import ru.practicum.service.category.CategoryService;
 
 import javax.validation.Valid;
@@ -26,9 +25,6 @@ public class AdminCategoryController {
 
     @DeleteMapping("/{catId}")
     public void deleteCategoryById(@PathVariable("catId") Long id) {
-        if (categoryService.getCategoryById(id) == null) {
-            throw new ExploreWithMeNotFoundException("Category with Id: " + id + " not found");
-        }
         categoryService.deleteCategoryById(id);
     }
 

@@ -1,18 +1,22 @@
-package ru.practicum.model;
+package ru.practicum.model.event;
 
 import lombok.Builder;
 import lombok.Value;
+import ru.practicum.model.location.Location;
+import ru.practicum.model.state.StateAction;
 
 @Value
 @Builder
-public class NewEvent {
+public class UpdateEventAdminRequest {
+    Long id;
     String annotation;
     Long category;
     String description;
     String eventDate;
     Location location;
     Boolean paid;
-    Integer participantLimit;
+    Long participantLimit;
     Boolean requestModeration;
+    StateAction stateAction;
     String title;
 }
