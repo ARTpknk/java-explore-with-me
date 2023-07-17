@@ -1,10 +1,10 @@
 package ru.practicum.model.event;
 
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 import ru.practicum.model.location.Location;
 
-@Value
+@Data
 @Builder
 public class NewEvent {
     String annotation;

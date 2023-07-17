@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where u.id in :ids " +
             "order by u.id")
     Page<User> findAllById(List<Long> ids, Pageable pageable);
+
+    User findByEmail(String email);
 }

@@ -1,5 +1,6 @@
 package ru.practicum.service.event;
 
+import ru.practicum.dto.event.EventFilter;
 import ru.practicum.model.event.Event;
 import ru.practicum.model.event.NewEvent;
 import ru.practicum.model.event.UpdateEventAdminRequest;
@@ -25,4 +26,8 @@ public interface EventService {
     List<Event> getEventsByCategory(Long categoryId);
 
     Event updateEventByUser(Long userId, Long eventId, UpdateEventUserRequest updateEventDto);
+
+    List<Event> getAllEventsByAdmin(EventFilter eventFilter);
+
+    List<Event> getAllEventsByPublic(EventFilter eventFilter, String uri, String ip);
 }

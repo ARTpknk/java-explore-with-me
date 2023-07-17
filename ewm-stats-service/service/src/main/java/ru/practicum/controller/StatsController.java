@@ -2,6 +2,7 @@ package ru.practicum.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.HitDto;
 import ru.practicum.StatsDto;
@@ -21,7 +22,10 @@ public class StatsController {
     private final StatsService statsService;
 
     @PostMapping("/hit")
+    @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody HitDto hitDto) {
+        System.out.println("контроллер принял");
+
         statsService.create(StatsMapper.toHit(hitDto));
     }
 
@@ -30,6 +34,7 @@ public class StatsController {
                               @RequestParam String end,
                               @RequestParam(required = false) List<String> uris,
                               @RequestParam(defaultValue = "false") Boolean unique) {
+        System.out.println("Controller " + uris);
         return statsService.get(DateFormatter.toLocalDateTime(start), DateFormatter.toLocalDateTime(end), uris, unique)
                 .stream()
                 .map(StatsMapper::toStatsDto)

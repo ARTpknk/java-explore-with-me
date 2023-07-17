@@ -1,10 +1,8 @@
 package ru.practicum.service.category;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.exception.ExploreWithMeAlreadyExistsException;
 import ru.practicum.exception.ExploreWithMeConflictException;
 import ru.practicum.exception.ExploreWithMeNotFoundException;
 import ru.practicum.model.category.Category;
@@ -23,12 +21,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public Category createCategory(Category category) {
-        try {
-            return repository.save(category);
-        } catch (DataIntegrityViolationException e) {
-            throw new ExploreWithMeAlreadyExistsException(String.format(
-                    "Category with name %s already exists", category.getName()));
+        if (repository.findByName(category.getName()) != null) {
+            throw new ExploreWithMeConflictException((String.format("Category with Name %s already exists",
+                    category.getName())));
         }
+        return repository.save(category);
     }
 
     @Override
@@ -59,9 +56,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public Category updateCategory(Category category) {
         Category oldCategory = getCategoryById(category.getId());
-
         if (!oldCategory.getName().equals(category.getName()) && repository.findByName(category.getName()) != null) {
-            throw new ExploreWithMeAlreadyExistsException((String.format("Category with Name %s already exists",
+            throw new ExploreWithMeConflictException((String.format("Category with Name %s already exists",
                     category.getName())));
         }
         return repository.save(oldCategory.withName(category.getName()));

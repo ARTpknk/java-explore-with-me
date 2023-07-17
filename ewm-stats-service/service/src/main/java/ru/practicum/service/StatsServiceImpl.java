@@ -16,23 +16,28 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public void create(Hit hit) {
-        statsRepository.save(hit);
+        System.out.println("Хит " + hit);
+        System.out.println("Результат криэйт" + statsRepository.save(hit));
     }
 
     @Override
-    public List<Stats> get(LocalDateTime start, LocalDateTime end, List<String> uri, Boolean unique) {
-        System.out.println("Прошёл контроллер");
+    public List<Stats> get(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         if (unique) {
-            if (uri == null) {
+            if (uris == null) {
                 return statsRepository.findUniqueWithoutUris(start, end);
             } else {
-                return statsRepository.findUniqueWithUris(start, end, uri);
+                System.out.println("Старт " + start);
+                System.out.println("конец " + end);
+                System.out.println("Юрис " + uris);
+                System.out.println("Юник " + unique);
+                System.out.println("Результат гет " + statsRepository.findUniqueWithUris(start, end, uris));
+                return statsRepository.findUniqueWithUris(start, end, uris);
             }
         } else {
-            if (uri == null) {
+            if (uris == null) {
                 return statsRepository.findNotUniqueWithoutUris(start, end);
             } else {
-                return statsRepository.findNotUniqueWithUris(start, end, uri);
+                return statsRepository.findNotUniqueWithUris(start, end, uris);
             }
         }
     }

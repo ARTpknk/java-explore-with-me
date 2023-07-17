@@ -42,8 +42,21 @@ public class RequestServiceImpl implements RequestService {
             throw new ExploreWithMeConflictException(
                     String.format("user is owner of event " + event.getId()));
         }
+        ParticipationRequest request;
+        if(event.getParticipantLimit()==0){
+           request = ParticipationRequest.builder()
+                    .event(eventService.getEventById(eventId))
+                    .requester(userService.getUserById(userId))
+                    .created(LocalDateTime.now())
+                    .status(RequestStatus.CONFIRMED)
+                    .build();
+            eventService.addConfirmedRequest(event);
+            return repository.save(request);
+        }
+
+
         if (event.getConfirmedRequests() < event.getParticipantLimit()) {
-            ParticipationRequest request;
+
             if (event.getRequestModeration()) {
                 request = ParticipationRequest.builder()
                         .event(eventService.getEventById(eventId))
@@ -137,7 +150,7 @@ public class RequestServiceImpl implements RequestService {
                     eventService.addConfirmedRequest(event);
                     request.setStatus(status);
                 } else {
-                    request.setStatus(RequestStatus.REJECTED);
+                    throw new ExploreWithMeConflictException("свободных мест нет");
                 }
             } else {
                 request.setStatus(RequestStatus.REJECTED);

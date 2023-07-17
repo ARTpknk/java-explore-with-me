@@ -2,6 +2,7 @@ package ru.practicum.controller.adminApi;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.user.UserDto;
 import ru.practicum.exception.ExploreWithMeBadRequest;
@@ -11,7 +12,6 @@ import ru.practicum.model.user.User;
 import ru.practicum.service.user.UserService;
 
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,27 +23,34 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public UserDto create(@Valid @RequestBody UserDto userDto) {
         User user = UserMapper.toUser(userDto);
         return UserMapper.toUserDto(userService.create(user));
     }
 
-    @GetMapping("/{ids}")
-    public List<UserDto> getUsers(@PathVariable("ids") List<Long> ids,
+    @GetMapping
+    public List<UserDto> getUsers(@RequestParam(required = false) List<Long> ids,
                                   @RequestParam(required = false, defaultValue = "0") int from,
-                                  @RequestParam(required = false, defaultValue = "20") int size) {
+                                  @RequestParam(required = false, defaultValue = "10") int size) {
         if (from < 0 || size < 1) {
             throw new ExploreWithMeBadRequest("некорректные значения");
         }
-        if (ids.isEmpty()) {
-            return Collections.emptyList();
+        if (ids == null) {
+            return userService.getUsers(from, size).stream().map(UserMapper::toUserDto)
+                    .collect(Collectors.toList());
         }
-        return userService.getUsers(ids, from, size)
+        if (ids.isEmpty()) {
+            return userService.getUsers(from, size).stream().map(UserMapper::toUserDto)
+                    .collect(Collectors.toList());
+        }
+        return userService.getUsersByIds(ids, from, size)
                 .stream().map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
 
     @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUserById(@PathVariable("userId") Long userId) {
         if (userService.getUserById(userId) == null) {
             throw new ExploreWithMeNotFoundException("User with Id: " + userId + " not found");

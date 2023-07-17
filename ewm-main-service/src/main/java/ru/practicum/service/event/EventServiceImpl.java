@@ -1,8 +1,12 @@
 package ru.practicum.service.event;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.practicum.BaseClient;
+import ru.practicum.StatsDto;
+import ru.practicum.dto.event.EventFilter;
 import ru.practicum.exception.ExploreWithMeBadRequest;
 import ru.practicum.exception.ExploreWithMeConflictException;
 import ru.practicum.exception.ExploreWithMeNotFoundException;
@@ -23,7 +27,11 @@ import ru.practicum.service.user.UserService;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -33,6 +41,10 @@ public class EventServiceImpl implements EventService {
     private final UserService userService;
     private final CategoryService categoryService;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final BaseClient baseClient;
+
+    @Value("ewm-stats-service")
+    private String app;
 
 
     @Override
@@ -120,9 +132,12 @@ public class EventServiceImpl implements EventService {
         }
         Event event = getEventById(eventId);
 
-        if (event.getState() == State.CANCELED || event.getState() == State.PENDING) {
+        if (event.getState() == State.REJECTED || event.getState() == State.PENDING) {
             if (updateEvent.getStateAction() == StateAction.CANCEL_REVIEW) {
                 event.setState(State.CANCELED);
+            }
+            if (updateEvent.getStateAction() == StateAction.SEND_TO_REVIEW) {
+                event.setState(State.PENDING);
             }
             if (updateEvent.getCategory() != null) {
                 if (!updateEvent.getCategory().equals(event.getCategory().getId())) {
@@ -136,6 +151,54 @@ public class EventServiceImpl implements EventService {
         } else {
             throw new ExploreWithMeConflictException("Event cannot be changed");
         }
+    }
+
+    @Override
+    public List<Event> getAllEventsByAdmin(EventFilter eventFilter) {
+
+        EventSpecification specification = new EventSpecification(eventFilter);
+
+        PageRequest pageRequest = PageRequest.of(eventFilter.getFrom() / eventFilter.getSize(),
+                eventFilter.getSize());
+
+
+        List<Event> events = repository.findAll(specification, pageRequest).getContent();
+        if (events.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return getViews(events, "/events");
+    }
+
+    @Override
+    public List<Event> getAllEventsByPublic(EventFilter eventFilter, String uri, String ip) {
+        Long[] categories = eventFilter.getCategories();
+        if (categories.length > 0) {
+            for (Long category : categories) {
+                if (category < 1) {
+                    throw new ExploreWithMeBadRequest("Нет неположительных категорий");
+                }
+            }
+        }
+        baseClient.postRequest(app, uri, ip, LocalDateTime.now());
+
+        String[] state = new String[1];
+        state[0] = State.PUBLISHED.toString();
+        eventFilter.setStates(state);
+
+        if (eventFilter.getRangeStart() == null && eventFilter.getRangeEnd() == null) {
+            eventFilter.setRangeStart(LocalDateTime.now());
+        }
+        EventSpecification specification = new EventSpecification(eventFilter);
+
+        PageRequest pageRequest = PageRequest.of(eventFilter.getFrom() / eventFilter.getSize(),
+                eventFilter.getSize());
+
+        List<Event> events = repository.findAll(specification, pageRequest).getContent();
+        if (events.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return getViews(events, uri);
     }
 
     @Override
@@ -158,7 +221,23 @@ public class EventServiceImpl implements EventService {
 
     private void checkEventDate(LocalDateTime eventDate) {
         if (eventDate != null && eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
-            throw new ExploreWithMeConflictException("Start date must be least 2 hours before");
+            throw new ExploreWithMeBadRequest("Start date must be least 2 hours before");
         }
+    }
+
+    private List<Event> getViews(List<Event> events, String uri) {
+        List<String> uris = events.stream().map(event -> uri + "/" + event.getId()).collect(Collectors.toList());
+        if (events.stream().map(Event::getEventDate).min(Comparator.naturalOrder()).isPresent()) {
+            LocalDateTime start = events.stream().map(Event::getEventDate).min(Comparator.naturalOrder()).get();
+            List<StatsDto> stats = baseClient.getStats(start, LocalDateTime.now(), uris, true);
+            if (!stats.isEmpty()) {
+                Map<String, Long> mappedStatsByUri = stats.stream()
+                        .collect(Collectors.toMap(StatsDto::getUri, StatsDto::getHits));
+                events = events.stream()
+                        .map(event -> event.withViews(
+                                mappedStatsByUri.get(uri + "/" + event.getId()).intValue())).collect(Collectors.toList());
+            }
+        }
+        return events;
     }
 }

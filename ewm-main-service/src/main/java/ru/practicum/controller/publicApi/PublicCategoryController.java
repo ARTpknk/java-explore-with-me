@@ -20,7 +20,7 @@ public class PublicCategoryController {
 
     @GetMapping()
     public List<CategoryDto> getUsers(@RequestParam(required = false, defaultValue = "0") int from,
-                                      @RequestParam(required = false, defaultValue = "20") int size) {
+                                      @RequestParam(required = false, defaultValue = "10") int size) {
         if (from < 0 || size < 1) {
             throw new ExploreWithMeBadRequest("некорректные значения");
         }

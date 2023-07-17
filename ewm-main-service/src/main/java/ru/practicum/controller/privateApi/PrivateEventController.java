@@ -2,6 +2,7 @@ package ru.practicum.controller.privateApi;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.event.*;
 import ru.practicum.dto.request.ParticipationRequestDto;
@@ -26,6 +27,7 @@ public class PrivateEventController {
     private final RequestService requestService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto createEvent(@Valid @RequestBody NewEventDto newEventDto, @PathVariable("userId") Long userId) {
         NewEvent newEvent = EventMapper.fromNewEventDtoToNewEvent(newEventDto);
         return EventMapper.fromEventToEventFullDto(eventService.createEvent(userId, newEvent));
@@ -34,7 +36,7 @@ public class PrivateEventController {
     @GetMapping()
     public List<EventShortDto> getEventsOfUser(@PathVariable("userId") Long userId,
                                                @RequestParam(required = false, defaultValue = "0") int from,
-                                               @RequestParam(required = false, defaultValue = "20") int size) {
+                                               @RequestParam(required = false, defaultValue = "10") int size) {
         if (from < 0 || size < 1) {
             throw new ExploreWithMeBadRequest("некорректные значения");
         }
@@ -52,7 +54,7 @@ public class PrivateEventController {
     @PatchMapping("/{eventId}")
     public EventFullDto updateEventByUser(@PathVariable("userId") Long userId,
                                           @PathVariable("eventId") Long eventId,
-                                          @RequestBody UpdateEventUserRequestDto updateEventDto) {
+                                          @Valid @RequestBody UpdateEventUserRequestDto updateEventDto) {
 
         return EventMapper.fromEventToEventFullDto(eventService.updateEventByUser(userId, eventId,
                 EventMapper.toUpdateEventUserRequest(updateEventDto)));

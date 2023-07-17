@@ -62,7 +62,7 @@ public class Event {
     @Column(name = "title")
     String title;
     @With
-    @Column(name = "views")
+    @Transient
     int views;
 
 

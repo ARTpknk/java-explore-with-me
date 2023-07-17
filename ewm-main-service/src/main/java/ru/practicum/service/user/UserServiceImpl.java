@@ -3,6 +3,7 @@ package ru.practicum.service.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.practicum.exception.ExploreWithMeConflictException;
 import ru.practicum.exception.ExploreWithMeNotFoundException;
 import ru.practicum.model.user.User;
 import ru.practicum.repository.UserRepository;
@@ -16,13 +17,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
+        if (repository.findByEmail(user.getEmail()) != null) {
+            throw new ExploreWithMeConflictException((String.format("User with email %s already exists",
+                    user.getEmail())));
+        }
         return repository.save(user);
     }
 
     @Override
-    public List<User> getUsers(List<Long> ids, int from, int size) {
+    public List<User> getUsersByIds(List<Long> ids, int from, int size) {
         return repository.findAllById(ids, PageRequest.of(from, size)).toList();
     }
+
+    @Override
+    public List<User> getUsers(int from, int size) {
+        return repository.findAll(PageRequest.of(from, size)).toList();
+    }
+
 
     @Override
     public User getUserById(Long id) {
