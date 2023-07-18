@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.exception.ExploreWithMeConflictException;
 import ru.practicum.exception.ExploreWithMeNotFoundException;
+import ru.practicum.formatter.DateFormatter;
 import ru.practicum.model.event.Event;
 import ru.practicum.model.event.EventRequestStatusUpdateRequest;
 import ru.practicum.model.event.EventRequestStatusUpdateResult;
@@ -18,6 +19,7 @@ import ru.practicum.service.user.UserService;
 import javax.transaction.Transactional;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,7 @@ public class RequestServiceImpl implements RequestService {
     private final EventService eventService;
     private final UserService userService;
     private final Clock clock;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
     @Override
@@ -46,12 +49,13 @@ public class RequestServiceImpl implements RequestService {
             throw new ExploreWithMeConflictException(
                     String.format("user is owner of event " + event.getId()));
         }
+        LocalDateTime createdOn = DateFormatter.toLocalDateTime(LocalDateTime.now().format(formatter));
         ParticipationRequest request;
         if(event.getParticipantLimit()==0){
            request = ParticipationRequest.builder()
                     .event(eventService.getEventById(eventId))
                     .requester(userService.getUserById(userId))
-                    .created(LocalDateTime.now(clock))
+                    .created(createdOn)
                     .status(RequestStatus.CONFIRMED)
                     .build();
             eventService.addConfirmedRequest(event);
@@ -65,14 +69,14 @@ public class RequestServiceImpl implements RequestService {
                 request = ParticipationRequest.builder()
                         .event(eventService.getEventById(eventId))
                         .requester(userService.getUserById(userId))
-                        .created(LocalDateTime.now(clock))
+                        .created(createdOn)
                         .status(RequestStatus.PENDING)
                         .build();
             } else {
                 request = ParticipationRequest.builder()
                         .event(eventService.getEventById(eventId))
                         .requester(userService.getUserById(userId))
-                        .created(LocalDateTime.now(clock))
+                        .created(createdOn)
                         .status(RequestStatus.PUBLISHED)
                         .build();
                 eventService.addConfirmedRequest(event);
