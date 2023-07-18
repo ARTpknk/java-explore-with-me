@@ -3,10 +3,12 @@ package ru.practicum.controller.publicApi;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.dto.event.EventFilter;
 import ru.practicum.dto.event.EventFullDto;
+import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.service.event.EventService;
 
@@ -27,5 +29,11 @@ public class PublicEventController {
         return eventService.getAllEventsByPublic(eventFilter, httpServletRequest.getRequestURI(),
                         httpServletRequest.getRemoteAddr()).stream()
                 .map(EventMapper::fromEventToEventFullDto).collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    public EventFullDto getEvent(@PathVariable("id") Long id, HttpServletRequest httpServletRequest) {
+        return EventMapper.fromEventToEventFullDto(eventService.getEventByIdByPublicRequest(id,
+                httpServletRequest.getRequestURI(), httpServletRequest.getRemoteAddr()));
     }
 }

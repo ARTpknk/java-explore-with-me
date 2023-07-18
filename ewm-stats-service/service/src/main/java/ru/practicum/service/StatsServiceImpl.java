@@ -2,6 +2,7 @@ package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.formatter.DateFormatter;
 import ru.practicum.model.Hit;
 import ru.practicum.model.Stats;
 import ru.practicum.repository.StatsRepository;
@@ -16,8 +17,7 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public void create(Hit hit) {
-        System.out.println("Хит " + hit);
-        System.out.println("Результат криэйт" + statsRepository.save(hit));
+        statsRepository.save(hit);
     }
 
     @Override
@@ -26,11 +26,6 @@ public class StatsServiceImpl implements StatsService {
             if (uris == null) {
                 return statsRepository.findUniqueWithoutUris(start, end);
             } else {
-                System.out.println("Старт " + start);
-                System.out.println("конец " + end);
-                System.out.println("Юрис " + uris);
-                System.out.println("Юник " + unique);
-                System.out.println("Результат гет " + statsRepository.findUniqueWithUris(start, end, uris));
                 return statsRepository.findUniqueWithUris(start, end, uris);
             }
         } else {

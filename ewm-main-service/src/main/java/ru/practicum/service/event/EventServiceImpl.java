@@ -27,10 +27,7 @@ import ru.practicum.service.user.UserService;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -180,8 +177,6 @@ public class EventServiceImpl implements EventService {
                 }
             }
         }
-        baseClient.postRequest(app, uri, ip, LocalDateTime.now());
-
         String[] state = new String[1];
         state[0] = State.PUBLISHED.toString();
         eventFilter.setStates(state);
@@ -195,10 +190,24 @@ public class EventServiceImpl implements EventService {
                 eventFilter.getSize());
 
         List<Event> events = repository.findAll(specification, pageRequest).getContent();
+        List<String> uris = events.stream().map(event -> uri + "/" + event.getId()).collect(Collectors.toList());
+        for (String u : uris) {
+            baseClient.postRequest(app, u, ip, LocalDateTime.now());
+        }
         if (events.isEmpty()) {
             return Collections.emptyList();
         }
         return getViews(events, uri);
+    }
+
+    @Override
+    public Event getEventByIdByPublicRequest(Long id, String uri, String ip) {
+        Event event = getEventById(id);
+        if (event.getState() != State.PUBLISHED) {
+            throw new ExploreWithMeNotFoundException("нет такого события");
+        }
+        baseClient.postRequest(app, uri, ip, LocalDateTime.now());
+        return getViewsForOneEvent(event, uri);
     }
 
     @Override
@@ -226,18 +235,44 @@ public class EventServiceImpl implements EventService {
     }
 
     private List<Event> getViews(List<Event> events, String uri) {
+        if (events.isEmpty()) {
+            return events;
+        }
+        LocalDateTime start = LocalDateTime.now().minusYears(15);
+        LocalDateTime end = LocalDateTime.now().plusYears(15);
+        //события уже отобраны по времени
+
         List<String> uris = events.stream().map(event -> uri + "/" + event.getId()).collect(Collectors.toList());
-        if (events.stream().map(Event::getEventDate).min(Comparator.naturalOrder()).isPresent()) {
-            LocalDateTime start = events.stream().map(Event::getEventDate).min(Comparator.naturalOrder()).get();
-            List<StatsDto> stats = baseClient.getStats(start, LocalDateTime.now(), uris, true);
-            if (!stats.isEmpty()) {
-                Map<String, Long> mappedStatsByUri = stats.stream()
-                        .collect(Collectors.toMap(StatsDto::getUri, StatsDto::getHits));
-                events = events.stream()
-                        .map(event -> event.withViews(
-                                mappedStatsByUri.get(uri + "/" + event.getId()).intValue())).collect(Collectors.toList());
-            }
+        List<StatsDto> stats = baseClient.getStats(start, end, uris, true);
+        if (!stats.isEmpty()) {
+            Map<String, Long> mappedStatsByUri = stats.stream()
+                    .collect(Collectors.toMap(StatsDto::getUri, StatsDto::getHits));
+            events = events.stream()
+                    .map(event -> {
+                        if (mappedStatsByUri.get(uri + "/" + event.getId()) != null) {
+                            return event.withViews(
+                                    mappedStatsByUri.get(uri + "/" + event.getId()).intValue());
+                        }
+                        return event;
+                    })
+                    .collect(Collectors.toList());
         }
         return events;
+    }
+
+    private Event getViewsForOneEvent(Event event, String uri) {
+        LocalDateTime start = LocalDateTime.now().minusYears(15);
+        LocalDateTime end = LocalDateTime.now().plusYears(15);
+        //события уже отобраны по времени
+
+        List<String> uris = new ArrayList<>();
+        uris.add(uri);
+
+        List<StatsDto> stats = baseClient.getStats(start, end, uris, true);
+
+        if (!stats.isEmpty()) {
+            return event.withViews(Math.toIntExact(stats.get(0).getHits()));
+        }
+        return event;
     }
 }

@@ -24,8 +24,6 @@ public class StatsController {
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody HitDto hitDto) {
-        System.out.println("контроллер принял");
-
         statsService.create(StatsMapper.toHit(hitDto));
     }
 
@@ -34,7 +32,6 @@ public class StatsController {
                               @RequestParam String end,
                               @RequestParam(required = false) List<String> uris,
                               @RequestParam(defaultValue = "false") Boolean unique) {
-        System.out.println("Controller " + uris);
         return statsService.get(DateFormatter.toLocalDateTime(start), DateFormatter.toLocalDateTime(end), uris, unique)
                 .stream()
                 .map(StatsMapper::toStatsDto)

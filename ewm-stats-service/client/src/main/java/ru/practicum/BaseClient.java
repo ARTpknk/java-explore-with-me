@@ -25,6 +25,7 @@ public class BaseClient {
                 .ip(ip)
                 .timestamp(time.format(formatter))
                 .build();
+        System.out.println("dto " + dto);
 
         webClient
                 .post()
