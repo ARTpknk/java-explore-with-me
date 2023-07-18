@@ -60,7 +60,8 @@ public class CategoryServiceImpl implements CategoryService {
             throw new ExploreWithMeConflictException((String.format("Category with Name %s already exists",
                     category.getName())));
         }
-        return repository.save(oldCategory.withName(category.getName()));
+        oldCategory.setName(category.getName());
+        return repository.save(oldCategory);
     }
 
     @Override

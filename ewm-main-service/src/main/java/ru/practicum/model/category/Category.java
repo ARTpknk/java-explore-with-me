@@ -2,7 +2,6 @@ package ru.practicum.model.category;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.With;
 
 import javax.persistence.*;
 
@@ -16,7 +15,6 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     Long id;
-    @With
     @Column(name = "categories_name", nullable = false)
     String name;
 
