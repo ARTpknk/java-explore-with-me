@@ -4,20 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.dto.category.CategoryDto;
 import ru.practicum.dto.compilation.CompilationDto;
 import ru.practicum.dto.compilation.NewCompilationDto;
 import ru.practicum.dto.compilation.UpdateCompilationRequest;
-import ru.practicum.dto.event.EventFullDto;
-import ru.practicum.dto.event.UpdateEventAdminRequestDto;
 import ru.practicum.exception.ExploreWithMeNotFoundException;
-import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.mapper.CompilationMapper;
-import ru.practicum.mapper.EventMapper;
-import ru.practicum.model.category.Category;
-import ru.practicum.model.compilation.Compilation;
 import ru.practicum.model.compilation.NewCompilation;
-import ru.practicum.service.category.CategoryService;
 import ru.practicum.service.compilation.CompilationService;
 
 import javax.validation.Valid;
@@ -49,26 +41,11 @@ public class AdminCompilationController {
 
     @PatchMapping("/{compId}")
     public CompilationDto updateCompilation(@PathVariable("compId") Long id,
-                               @Valid @RequestBody UpdateCompilationRequest updateCompilationRequest) {
+                                            @Valid @RequestBody UpdateCompilationRequest updateCompilationRequest) {
 
         return CompilationMapper.toCompilationDto(compilationService.updateCompilation(id,
                 CompilationMapper.toUpdateCompilation(updateCompilationRequest)));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

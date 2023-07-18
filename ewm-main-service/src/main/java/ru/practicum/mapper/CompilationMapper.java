@@ -4,12 +4,9 @@ import lombok.experimental.UtilityClass;
 import ru.practicum.dto.compilation.CompilationDto;
 import ru.practicum.dto.compilation.NewCompilationDto;
 import ru.practicum.dto.compilation.UpdateCompilationRequest;
-import ru.practicum.dto.request.ParticipationRequestDto;
-import ru.practicum.formatter.DateFormatter;
 import ru.practicum.model.compilation.Compilation;
 import ru.practicum.model.compilation.NewCompilation;
 import ru.practicum.model.compilation.UpdateCompilation;
-import ru.practicum.model.request.ParticipationRequest;
 
 import java.util.stream.Collectors;
 
@@ -36,19 +33,19 @@ public class CompilationMapper {
     public CompilationDto toCompilationDto(Compilation compilation) {
         return CompilationDto.builder()
                 .id(compilation.getId())
-                .events(compilation.getEvents().stream().map(EventMapper :: fromEventToEventShortDto)
+                .events(compilation.getEvents().stream().map(EventMapper::fromEventToEventShortDto)
                         .collect(Collectors.toSet()))
                 .pinned(compilation.getPinned())
                 .title(compilation.getTitle())
                 .build();
     }
 
-    public Compilation updateCompilation(Compilation compilation, UpdateCompilation updateCompilation){
+    public Compilation updateCompilation(Compilation compilation, UpdateCompilation updateCompilation) {
 
-        if(updateCompilation.getPinned()!=null){
+        if (updateCompilation.getPinned() != null) {
             compilation.setPinned(updateCompilation.getPinned());
         }
-        if(updateCompilation.getTitle()!=null && updateCompilation.getTitle().isBlank()){
+        if (updateCompilation.getTitle() != null && updateCompilation.getTitle().isBlank()) {
             compilation.setTitle(updateCompilation.getTitle());
         }
         return compilation;

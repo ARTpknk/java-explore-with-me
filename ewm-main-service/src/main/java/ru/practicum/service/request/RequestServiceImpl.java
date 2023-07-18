@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-
 @RequiredArgsConstructor
 @Service
 public class RequestServiceImpl implements RequestService {
@@ -51,8 +50,8 @@ public class RequestServiceImpl implements RequestService {
         }
         LocalDateTime createdOn = DateFormatter.toLocalDateTime(LocalDateTime.now().format(formatter));
         ParticipationRequest request;
-        if(event.getParticipantLimit()==0){
-           request = ParticipationRequest.builder()
+        if (event.getParticipantLimit() == 0) {
+            request = ParticipationRequest.builder()
                     .event(eventService.getEventById(eventId))
                     .requester(userService.getUserById(userId))
                     .created(createdOn)

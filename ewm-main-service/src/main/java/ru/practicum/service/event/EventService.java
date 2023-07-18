@@ -19,6 +19,7 @@ public interface EventService {
     Event updateEventByAdmin(Long id, UpdateEventAdminRequest updateEventAdminRequest);
 
     Event getEventById(Long id);
+
     List<Event> getEventsByIds(Set<Long> ids);
 
     void addConfirmedRequest(Event event);
@@ -32,5 +33,6 @@ public interface EventService {
     List<Event> getAllEventsByAdmin(EventFilter eventFilter);
 
     List<Event> getAllEventsByPublic(EventFilter eventFilter, String uri, String ip);
+
     Event getEventByIdByPublicRequest(Long id, String uri, String ip);
 }

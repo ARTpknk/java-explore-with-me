@@ -12,6 +12,7 @@ public class DateFormatter {
     public String toString(LocalDateTime date) {
         return date.format(formatter);
     }
+
     public LocalDateTime toLocalDateTime(String date) {
         return LocalDateTime.parse(date, formatter);
     }

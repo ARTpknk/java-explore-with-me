@@ -90,10 +90,9 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> getEventsByIds(Set<Long> ids) {
-        try{
+        try {
             return repository.findAllById(ids);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             throw new ExploreWithMeConflictException("Передан несуществующий event");
         }
 
@@ -183,7 +182,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> getAllEventsByPublic(EventFilter eventFilter, String uri, String ip) {
         Long[] categories = eventFilter.getCategories();
-        if (categories.length > 0) {
+        if (eventFilter.getCategories() != null) {
             for (Long category : categories) {
                 if (category < 1) {
                     throw new ExploreWithMeBadRequest("Нет неположительных категорий");

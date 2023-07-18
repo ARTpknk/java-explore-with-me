@@ -3,17 +3,11 @@ package ru.practicum.controller.publicApi;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.dto.category.CategoryDto;
 import ru.practicum.dto.compilation.CompilationDto;
-import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.exception.ExploreWithMeBadRequest;
-import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.mapper.CompilationMapper;
-import ru.practicum.mapper.EventMapper;
-import ru.practicum.model.compilation.Compilation;
 import ru.practicum.service.compilation.CompilationService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,8 +18,6 @@ import java.util.stream.Collectors;
 public class PublicCompilationController {
 
     private final CompilationService compilationService;
-
-
 
 
     @GetMapping()
@@ -45,14 +37,6 @@ public class PublicCompilationController {
     public CompilationDto getCompilation(@PathVariable("compId") Long id) {
         return CompilationMapper.toCompilationDto(compilationService.getCompilationById(id));
     }
-
-
-
-
-
-
-
-
 
 
 }
