@@ -19,7 +19,7 @@ public class PublicCategoryController {
     private final CategoryService categoryService;
 
     @GetMapping()
-    public List<CategoryDto> getUsers(@RequestParam(required = false, defaultValue = "0") int from,
+    public List<CategoryDto> getCategories(@RequestParam(required = false, defaultValue = "0") int from,
                                       @RequestParam(required = false, defaultValue = "10") int size) {
         if (from < 0 || size < 1) {
             throw new ExploreWithMeBadRequest("некорректные значения");
@@ -30,7 +30,7 @@ public class PublicCategoryController {
     }
 
     @GetMapping("/{catId}")
-    public CategoryDto findUserById(@PathVariable("catId") Long id) {
+    public CategoryDto findCategoryById(@PathVariable("catId") Long id) {
         return CategoryMapper.toCategoryDto(categoryService.getCategoryById(id));
     }
 }

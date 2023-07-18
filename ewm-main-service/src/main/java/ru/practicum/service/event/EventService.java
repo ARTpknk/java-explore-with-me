@@ -7,6 +7,7 @@ import ru.practicum.model.event.UpdateEventAdminRequest;
 import ru.practicum.model.event.UpdateEventUserRequest;
 
 import java.util.List;
+import java.util.Set;
 
 public interface EventService {
     Event createEvent(Long userId, NewEvent newEvent);
@@ -18,6 +19,7 @@ public interface EventService {
     Event updateEventByAdmin(Long id, UpdateEventAdminRequest updateEventAdminRequest);
 
     Event getEventById(Long id);
+    List<Event> getEventsByIds(Set<Long> ids);
 
     void addConfirmedRequest(Event event);
 

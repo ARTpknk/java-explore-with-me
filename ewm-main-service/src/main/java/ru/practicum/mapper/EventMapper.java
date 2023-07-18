@@ -133,7 +133,7 @@ public class EventMapper {
             event.setRequestModeration(updateRequest.getRequestModeration());
         }
         if (updateRequest.getTitle() != null && !updateRequest.getTitle().isBlank()) {
-            event.setTitle(event.getTitle());
+            event.setTitle(updateRequest.getTitle());
         }
         return event;
     }

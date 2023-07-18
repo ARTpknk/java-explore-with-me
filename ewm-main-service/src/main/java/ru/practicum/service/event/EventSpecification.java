@@ -7,6 +7,7 @@ import ru.practicum.model.event.Event;
 import ru.practicum.model.state.State;
 
 import javax.persistence.criteria.*;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EventSpecification implements Specification<Event> {
     private final EventFilter eventFilter;
+    private final Clock clock;
 
     @Override
     public Predicate toPredicate(Root<Event> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
@@ -48,13 +50,13 @@ public class EventSpecification implements Specification<Event> {
         } else if (eventFilter.getRangeEnd() != null) {
             predicates.add(
                     builder.between(
-                            root.get("eventDate"), LocalDateTime.now(),
+                            root.get("eventDate"), LocalDateTime.now(clock),
                             eventFilter.getRangeEnd()));
         } else {
             predicates.add(
                     builder.greaterThanOrEqualTo(
                             root.get("eventDate"),
-                            LocalDateTime.now()));
+                            LocalDateTime.now(clock)));
         }
         if (eventFilter.getText() != null) {
             predicates.add(

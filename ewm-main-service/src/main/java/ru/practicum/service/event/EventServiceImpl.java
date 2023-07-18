@@ -25,6 +25,7 @@ import ru.practicum.service.category.CategoryService;
 import ru.practicum.service.user.UserService;
 
 import javax.transaction.Transactional;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -39,6 +40,7 @@ public class EventServiceImpl implements EventService {
     private final CategoryService categoryService;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final BaseClient baseClient;
+    private final Clock clock;
 
     @Value("ewm-stats-service")
     private String app;
@@ -87,6 +89,17 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<Event> getEventsByIds(Set<Long> ids) {
+        try{
+            return repository.findAllById(ids);
+        }
+        catch(Exception e){
+            throw new ExploreWithMeConflictException("Передан несуществующий event");
+        }
+
+    }
+
+    @Override
     @Transactional
     public Event updateEventByAdmin(Long id, UpdateEventAdminRequest updateEventAdminRequest) {
         if (updateEventAdminRequest.getEventDate() != null) {
@@ -106,7 +119,7 @@ public class EventServiceImpl implements EventService {
         }
         if (updateEventAdminRequest.getStateAction() == StateAction.PUBLISH_EVENT) {
             event.setState(State.PUBLISHED);
-            event.setPublishedOn(DateFormatter.toLocalDateTime(LocalDateTime.now().format(formatter)));
+            event.setPublishedOn(DateFormatter.toLocalDateTime(LocalDateTime.now(clock).format(formatter)));
         }
         if (updateEventAdminRequest.getStateAction() == StateAction.REJECT_EVENT) {
             event.setState(State.REJECTED);
@@ -153,7 +166,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> getAllEventsByAdmin(EventFilter eventFilter) {
 
-        EventSpecification specification = new EventSpecification(eventFilter);
+        EventSpecification specification = new EventSpecification(eventFilter, clock);
 
         PageRequest pageRequest = PageRequest.of(eventFilter.getFrom() / eventFilter.getSize(),
                 eventFilter.getSize());
@@ -182,9 +195,9 @@ public class EventServiceImpl implements EventService {
         eventFilter.setStates(state);
 
         if (eventFilter.getRangeStart() == null && eventFilter.getRangeEnd() == null) {
-            eventFilter.setRangeStart(LocalDateTime.now());
+            eventFilter.setRangeStart(LocalDateTime.now(clock));
         }
-        EventSpecification specification = new EventSpecification(eventFilter);
+        EventSpecification specification = new EventSpecification(eventFilter, clock);
 
         PageRequest pageRequest = PageRequest.of(eventFilter.getFrom() / eventFilter.getSize(),
                 eventFilter.getSize());
@@ -192,7 +205,7 @@ public class EventServiceImpl implements EventService {
         List<Event> events = repository.findAll(specification, pageRequest).getContent();
         List<String> uris = events.stream().map(event -> uri + "/" + event.getId()).collect(Collectors.toList());
         for (String u : uris) {
-            baseClient.postRequest(app, u, ip, LocalDateTime.now());
+            baseClient.postRequest(app, u, ip, LocalDateTime.now(clock));
         }
         if (events.isEmpty()) {
             return Collections.emptyList();
@@ -206,7 +219,7 @@ public class EventServiceImpl implements EventService {
         if (event.getState() != State.PUBLISHED) {
             throw new ExploreWithMeNotFoundException("нет такого события");
         }
-        baseClient.postRequest(app, uri, ip, LocalDateTime.now());
+        baseClient.postRequest(app, uri, ip, LocalDateTime.now(clock));
         return getViewsForOneEvent(event, uri);
     }
 
@@ -229,7 +242,7 @@ public class EventServiceImpl implements EventService {
 
 
     private void checkEventDate(LocalDateTime eventDate) {
-        if (eventDate != null && eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
+        if (eventDate != null && eventDate.isBefore(LocalDateTime.now(clock).plusHours(2))) {
             throw new ExploreWithMeBadRequest("Start date must be least 2 hours before");
         }
     }
@@ -238,8 +251,8 @@ public class EventServiceImpl implements EventService {
         if (events.isEmpty()) {
             return events;
         }
-        LocalDateTime start = LocalDateTime.now().minusYears(15);
-        LocalDateTime end = LocalDateTime.now().plusYears(15);
+        LocalDateTime start = LocalDateTime.now(clock).minusYears(15);
+        LocalDateTime end = LocalDateTime.now(clock).plusYears(15);
         //события уже отобраны по времени
 
         List<String> uris = events.stream().map(event -> uri + "/" + event.getId()).collect(Collectors.toList());

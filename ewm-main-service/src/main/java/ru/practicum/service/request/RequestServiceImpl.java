@@ -16,9 +16,12 @@ import ru.practicum.service.event.EventService;
 import ru.practicum.service.user.UserService;
 
 import javax.transaction.Transactional;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+
 
 @RequiredArgsConstructor
 @Service
@@ -27,6 +30,7 @@ public class RequestServiceImpl implements RequestService {
     private final RequestRepository repository;
     private final EventService eventService;
     private final UserService userService;
+    private final Clock clock;
 
 
     @Override
@@ -47,7 +51,7 @@ public class RequestServiceImpl implements RequestService {
            request = ParticipationRequest.builder()
                     .event(eventService.getEventById(eventId))
                     .requester(userService.getUserById(userId))
-                    .created(LocalDateTime.now())
+                    .created(LocalDateTime.now(clock))
                     .status(RequestStatus.CONFIRMED)
                     .build();
             eventService.addConfirmedRequest(event);
@@ -61,14 +65,14 @@ public class RequestServiceImpl implements RequestService {
                 request = ParticipationRequest.builder()
                         .event(eventService.getEventById(eventId))
                         .requester(userService.getUserById(userId))
-                        .created(LocalDateTime.now())
+                        .created(LocalDateTime.now(clock))
                         .status(RequestStatus.PENDING)
                         .build();
             } else {
                 request = ParticipationRequest.builder()
                         .event(eventService.getEventById(eventId))
                         .requester(userService.getUserById(userId))
-                        .created(LocalDateTime.now())
+                        .created(LocalDateTime.now(clock))
                         .status(RequestStatus.PUBLISHED)
                         .build();
                 eventService.addConfirmedRequest(event);
