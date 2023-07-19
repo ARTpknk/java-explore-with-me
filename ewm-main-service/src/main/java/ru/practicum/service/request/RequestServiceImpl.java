@@ -17,12 +17,10 @@ import ru.practicum.service.event.EventService;
 import ru.practicum.service.user.UserService;
 
 import javax.transaction.Transactional;
-import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @RequiredArgsConstructor
 @Service
@@ -31,7 +29,6 @@ public class RequestServiceImpl implements RequestService {
     private final RequestRepository repository;
     private final EventService eventService;
     private final UserService userService;
-    private final Clock clock;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
@@ -60,7 +57,6 @@ public class RequestServiceImpl implements RequestService {
             eventService.addConfirmedRequest(event);
             return repository.save(request);
         }
-
 
         if (event.getConfirmedRequests() < event.getParticipantLimit()) {
 
@@ -102,7 +98,6 @@ public class RequestServiceImpl implements RequestService {
         return repository.findByEventId(eventId);
     }
 
-
     @Override
     public ParticipationRequest cancelRequest(Long userId, Long requestId) {
         ParticipationRequest request = getRequestById(requestId);
@@ -118,7 +113,6 @@ public class RequestServiceImpl implements RequestService {
         }
     }
 
-
     @Override
     public ParticipationRequest getRequestById(Long requestId) {
         if (repository.findById(requestId).isPresent()) {
@@ -127,7 +121,6 @@ public class RequestServiceImpl implements RequestService {
             throw new ExploreWithMeNotFoundException("Request with Id: " + requestId + " not found");
         }
     }
-
 
     @Override
     public EventRequestStatusUpdateResult updateRequests(Long userId,

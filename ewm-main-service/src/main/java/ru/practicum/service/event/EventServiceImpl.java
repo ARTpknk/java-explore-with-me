@@ -233,12 +233,6 @@ public class EventServiceImpl implements EventService {
         repository.save(event);
     }
 
-    @Override
-    public List<Event> getEventsByCategory(Long categoryId) {
-        return repository.findAllByCategoryId(categoryId);
-    }
-
-
     private void checkEventDate(LocalDateTime eventDate) {
         if (eventDate != null && eventDate.isBefore(LocalDateTime.now(clock).plusHours(2))) {
             throw new ExploreWithMeBadRequest("Start date must be least 2 hours before");

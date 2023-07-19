@@ -6,6 +6,5 @@ import ru.practicum.model.category.Category;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-
     Category findByName(String name);
 }

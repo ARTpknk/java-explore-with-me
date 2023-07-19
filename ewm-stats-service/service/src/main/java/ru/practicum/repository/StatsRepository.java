@@ -41,4 +41,3 @@ public interface StatsRepository extends JpaRepository<Hit, Integer> {
             "ORDER BY COUNT(h.ip) DESC")
     List<Stats> findNotUniqueWithoutUris(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }
-

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.compilation.CompilationDto;
-import ru.practicum.exception.ExploreWithMeBadRequest;
 import ru.practicum.mapper.CompilationMapper;
 import ru.practicum.service.compilation.CompilationService;
 
@@ -19,15 +18,10 @@ public class PublicCompilationController {
 
     private final CompilationService compilationService;
 
-
     @GetMapping()
     public List<CompilationDto> getCompilations(@RequestParam(required = false, defaultValue = "0") int from,
                                                 @RequestParam(required = false, defaultValue = "10") int size,
                                                 @RequestParam(required = false, defaultValue = "false") boolean pinned) {
-        if (from < 0 || size < 1) {
-            throw new ExploreWithMeBadRequest("некорректные значения");
-        }
-
         return compilationService.getCompilations(from, size, pinned)
                 .stream().map(CompilationMapper::toCompilationDto)
                 .collect(Collectors.toList());
@@ -37,6 +31,4 @@ public class PublicCompilationController {
     public CompilationDto getCompilation(@PathVariable("compId") Long id) {
         return CompilationMapper.toCompilationDto(compilationService.getCompilationById(id));
     }
-
-
 }

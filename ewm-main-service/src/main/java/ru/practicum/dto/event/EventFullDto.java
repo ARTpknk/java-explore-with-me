@@ -9,7 +9,6 @@ import ru.practicum.dto.user.UserShortDto;
 @Data
 @Builder
 public class EventFullDto {
-
     Long id;
     String annotation;
     CategoryDto category;

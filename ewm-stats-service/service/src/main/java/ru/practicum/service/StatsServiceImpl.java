@@ -15,7 +15,6 @@ import java.util.Objects;
 public class StatsServiceImpl implements StatsService {
     private final StatsRepository statsRepository;
 
-
     @Override
     public void create(Hit hit) {
         statsRepository.save(hit);

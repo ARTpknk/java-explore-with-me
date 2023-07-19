@@ -169,23 +169,6 @@ public class EventMapper {
     }
 
     @Transactional
-    public UpdateEventRequest toUpdateEventUserRequest(UpdateEventRequestDto dto) {
-        return UpdateEventRequest.builder()
-                .annotation(dto.getAnnotation())
-                .category(dto.getCategory())
-                .description(dto.getDescription())
-                .eventDate(dto.getEventDate())
-                .location(dto.getLocation() == null ?
-                        null : toLocation(dto.getLocation()))
-                .paid(dto.getPaid())
-                .participantLimit(dto.getParticipantLimit())
-                .requestModeration(dto.getRequestModeration())
-                .stateAction(dto.getStateAction())
-                .title(dto.getTitle())
-                .build();
-    }
-
-    @Transactional
     public EventRequestStatusUpdateRequest
     toEventRequestStatusUpdateRequest(EventRequestStatusUpdateRequestDto dto) {
         return EventRequestStatusUpdateRequest.builder()

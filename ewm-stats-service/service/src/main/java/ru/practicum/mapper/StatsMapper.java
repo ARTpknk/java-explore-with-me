@@ -20,26 +20,10 @@ public class StatsMapper {
                 .build();
     }
 
-    public HitDto toHitDto(Hit hit) {
-        return HitDto.builder()
-                .app(hit.getApp())
-                .uri(hit.getUri())
-                .ip(hit.getIp())
-                .timestamp(DateFormatter.toString(hit.getTimestamp()))
-                .build();
-    }
-
     public StatsDto toStatsDto(Stats stats) {
         return StatsDto.builder()
                 .app(stats.getApp())
                 .uri(stats.getUri())
                 .hits(stats.getHits()).build();
-    }
-
-    public Stats toStats(StatsDto statsDto) {
-        return Stats.builder()
-                .app(statsDto.getApp())
-                .uri(statsDto.getUri())
-                .hits(statsDto.getHits()).build();
     }
 }

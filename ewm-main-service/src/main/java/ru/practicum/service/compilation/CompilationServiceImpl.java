@@ -24,10 +24,10 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public Compilation createCompilation(NewCompilation newCompilation) {
-        if(newCompilation.getTitle() == null){
+        if (newCompilation.getTitle() == null) {
             throw new ExploreWithMeBadRequest("необходим заголовок");
         }
-        if(newCompilation.getTitle().isBlank()){
+        if (newCompilation.getTitle().isBlank()) {
             throw new ExploreWithMeBadRequest("необходим заголовок");
         }
 
@@ -61,8 +61,7 @@ public class CompilationServiceImpl implements CompilationService {
     public Compilation updateCompilation(Long id, NewCompilation updateCompilation) {
         Compilation compilation = getCompilationById(id);
         if (updateCompilation.getEvents() != null && !updateCompilation.getEvents().isEmpty()) {
-            List<Event> events = new ArrayList<>();
-            events = eventService.getEventsByIds(updateCompilation.getEvents());
+            List<Event> events = eventService.getEventsByIds(updateCompilation.getEvents());
             compilation.setEvents(new HashSet<>(events));
         }
         return repository.save(CompilationMapper.updateCompilation(compilation, updateCompilation));

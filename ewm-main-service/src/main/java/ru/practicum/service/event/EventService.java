@@ -25,8 +25,6 @@ public interface EventService {
 
     void deleteConfirmedRequest(Event event);
 
-    List<Event> getEventsByCategory(Long categoryId);
-
     Event updateEventByUser(Long userId, Long eventId, UpdateEventRequest updateEventDto);
 
     List<Event> getAllEventsByAdmin(EventFilter eventFilter);

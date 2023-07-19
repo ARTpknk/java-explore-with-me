@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.user.UserDto;
-import ru.practicum.exception.ExploreWithMeBadRequest;
 import ru.practicum.exception.ExploreWithMeNotFoundException;
 import ru.practicum.mapper.UserMapper;
 import ru.practicum.model.user.User;
@@ -33,9 +32,6 @@ public class UserController {
     public List<UserDto> getUsers(@RequestParam(required = false) List<Long> ids,
                                   @RequestParam(required = false, defaultValue = "0") int from,
                                   @RequestParam(required = false, defaultValue = "10") int size) {
-        if (from < 0 || size < 1) {
-            throw new ExploreWithMeBadRequest("некорректные значения");
-        }
         if (ids == null) {
             return userService.getUsers(from, size).stream().map(UserMapper::toUserDto)
                     .collect(Collectors.toList());

@@ -9,7 +9,6 @@ import ru.practicum.model.category.Category;
 import ru.practicum.repository.CategoryRepository;
 import ru.practicum.repository.EventRepository;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @RequiredArgsConstructor

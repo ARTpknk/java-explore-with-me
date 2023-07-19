@@ -21,7 +21,6 @@ public class AdminCompilationController {
 
     private final CompilationService compilationService;
 
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto createCompilation(@Valid @RequestBody NewCompilationDto newCompilationDto) {
@@ -45,6 +44,4 @@ public class AdminCompilationController {
         return CompilationMapper.toCompilationDto(compilationService.updateCompilation(id,
                 CompilationMapper.toNewCompilation(updateCompilationRequest)));
     }
-
-
 }
