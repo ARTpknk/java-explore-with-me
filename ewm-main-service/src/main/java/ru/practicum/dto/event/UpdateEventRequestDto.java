@@ -9,7 +9,8 @@ import javax.validation.constraints.Size;
 
 @Data
 @Builder
-public class UpdateEventUserRequestDto {
+public class UpdateEventRequestDto {
+    Long id;
     @Size(min = 20, max = 2000)
     String annotation;
     Long category;

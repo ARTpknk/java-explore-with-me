@@ -91,7 +91,7 @@ public class EventMapper {
     }
 
     @Transactional
-    public UpdateEventRequest toUpdateEventRequest(UpdateEventAdminRequestDto dto) {
+    public UpdateEventRequest toUpdateEventRequest(UpdateEventRequestDto dto) {
         return UpdateEventRequest.builder()
                 .id(dto.getId())
                 .annotation(dto.getAnnotation())
@@ -169,7 +169,7 @@ public class EventMapper {
     }
 
     @Transactional
-    public UpdateEventRequest toUpdateEventUserRequest(UpdateEventUserRequestDto dto) {
+    public UpdateEventRequest toUpdateEventUserRequest(UpdateEventRequestDto dto) {
         return UpdateEventRequest.builder()
                 .annotation(dto.getAnnotation())
                 .category(dto.getCategory())
