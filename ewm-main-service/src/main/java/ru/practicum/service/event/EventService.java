@@ -3,8 +3,7 @@ package ru.practicum.service.event;
 import ru.practicum.dto.event.EventFilter;
 import ru.practicum.model.event.Event;
 import ru.practicum.model.event.NewEvent;
-import ru.practicum.model.event.UpdateEventAdminRequest;
-import ru.practicum.model.event.UpdateEventUserRequest;
+import ru.practicum.model.event.UpdateEventRequest;
 
 import java.util.List;
 import java.util.Set;
@@ -16,7 +15,7 @@ public interface EventService {
 
     Event getEventOfUser(Long userId, Long eventId);
 
-    Event updateEventByAdmin(Long id, UpdateEventAdminRequest updateEventAdminRequest);
+    Event updateEventByAdmin(Long id, UpdateEventRequest updateEventRequest);
 
     Event getEventById(Long id);
 
@@ -28,7 +27,7 @@ public interface EventService {
 
     List<Event> getEventsByCategory(Long categoryId);
 
-    Event updateEventByUser(Long userId, Long eventId, UpdateEventUserRequest updateEventDto);
+    Event updateEventByUser(Long userId, Long eventId, UpdateEventRequest updateEventDto);
 
     List<Event> getAllEventsByAdmin(EventFilter eventFilter);
 

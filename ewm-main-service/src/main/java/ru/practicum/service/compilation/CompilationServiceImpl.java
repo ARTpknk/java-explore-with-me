@@ -3,11 +3,11 @@ package ru.practicum.service.compilation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.practicum.exception.ExploreWithMeBadRequest;
 import ru.practicum.exception.ExploreWithMeNotFoundException;
 import ru.practicum.mapper.CompilationMapper;
 import ru.practicum.model.compilation.Compilation;
 import ru.practicum.model.compilation.NewCompilation;
-import ru.practicum.model.compilation.UpdateCompilation;
 import ru.practicum.model.event.Event;
 import ru.practicum.repository.CompilationRepository;
 import ru.practicum.service.event.EventService;
@@ -24,6 +24,13 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public Compilation createCompilation(NewCompilation newCompilation) {
+        if(newCompilation.getTitle() == null){
+            throw new ExploreWithMeBadRequest("необходим заголовок");
+        }
+        if(newCompilation.getTitle().isBlank()){
+            throw new ExploreWithMeBadRequest("необходим заголовок");
+        }
+
         List<Event> events = new ArrayList<>();
         if (newCompilation.getEvents() != null) {
             events = eventService.getEventsByIds(newCompilation.getEvents());
@@ -51,7 +58,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public Compilation updateCompilation(Long id, UpdateCompilation updateCompilation) {
+    public Compilation updateCompilation(Long id, NewCompilation updateCompilation) {
         Compilation compilation = getCompilationById(id);
         if (updateCompilation.getEvents() != null && !updateCompilation.getEvents().isEmpty()) {
             List<Event> events = new ArrayList<>();

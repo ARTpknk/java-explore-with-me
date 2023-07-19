@@ -7,7 +7,7 @@ import ru.practicum.model.state.StateAction;
 
 @Value
 @Builder
-public class UpdateEventAdminRequest {
+public class UpdateEventRequest {
     Long id;
     String annotation;
     Long category;

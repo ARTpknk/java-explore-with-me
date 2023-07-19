@@ -25,7 +25,7 @@ public class AdminEventController {
                                @Valid @RequestBody UpdateEventAdminRequestDto updateEventAdminRequestDto) {
 
         return EventMapper.fromEventToEventFullDto(eventService.updateEventByAdmin(id,
-                EventMapper.toUpdateEventAdminRequest(updateEventAdminRequestDto)));
+                EventMapper.toUpdateEventRequest(updateEventAdminRequestDto)));
     }
 
     @GetMapping()

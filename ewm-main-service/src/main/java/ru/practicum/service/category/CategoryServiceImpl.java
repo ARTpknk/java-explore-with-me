@@ -19,7 +19,6 @@ public class CategoryServiceImpl implements CategoryService {
     private final EventRepository eventRepository;
 
     @Override
-    @Transactional
     public Category createCategory(Category category) {
         if (repository.findByName(category.getName()) != null) {
             throw new ExploreWithMeConflictException((String.format("Category with Name %s already exists",
@@ -29,7 +28,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
     public Category getCategoryById(Long id) {
         if (repository.findById(id).isPresent()) {
             return repository.findById(id).get();
@@ -39,7 +37,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
     public void deleteCategoryById(Long id) {
         //только если нет событий по категории
         //добавить проверку
@@ -53,7 +50,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
     public Category updateCategory(Category category) {
         Category oldCategory = getCategoryById(category.getId());
         if (!oldCategory.getName().equals(category.getName()) && repository.findByName(category.getName()) != null) {

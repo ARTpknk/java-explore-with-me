@@ -91,8 +91,8 @@ public class EventMapper {
     }
 
     @Transactional
-    public UpdateEventAdminRequest toUpdateEventAdminRequest(UpdateEventAdminRequestDto dto) {
-        return UpdateEventAdminRequest.builder()
+    public UpdateEventRequest toUpdateEventRequest(UpdateEventAdminRequestDto dto) {
+        return UpdateEventRequest.builder()
                 .id(dto.getId())
                 .annotation(dto.getAnnotation())
                 .category(dto.getCategory())
@@ -109,7 +109,7 @@ public class EventMapper {
     }
 
     @Transactional
-    public Event updatingEventByAdmin(Event event, Category category, UpdateEventAdminRequest updateRequest) {
+    public Event updatingEventByAdmin(Event event, Category category, UpdateEventRequest updateRequest) {
         event.setCategory(category);
         if (updateRequest.getAnnotation() != null && !updateRequest.getAnnotation().isBlank()) {
             event.setAnnotation(updateRequest.getAnnotation());
@@ -139,7 +139,7 @@ public class EventMapper {
     }
 
     @Transactional
-    public Event updatingEventByUser(Event event, Category category, UpdateEventUserRequest updateRequest) {
+    public Event updatingEventByUser(Event event, Category category, UpdateEventRequest updateRequest) {
         event.setCategory(category);
         if (updateRequest.getAnnotation() != null && !updateRequest.getAnnotation().isBlank()) {
             event.setAnnotation(updateRequest.getAnnotation());
@@ -169,8 +169,8 @@ public class EventMapper {
     }
 
     @Transactional
-    public UpdateEventUserRequest toUpdateEventUserRequest(UpdateEventUserRequestDto dto) {
-        return UpdateEventUserRequest.builder()
+    public UpdateEventRequest toUpdateEventUserRequest(UpdateEventUserRequestDto dto) {
+        return UpdateEventRequest.builder()
                 .annotation(dto.getAnnotation())
                 .category(dto.getCategory())
                 .description(dto.getDescription())

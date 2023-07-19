@@ -15,8 +15,7 @@ import ru.practicum.mapper.EventMapper;
 import ru.practicum.model.category.Category;
 import ru.practicum.model.event.Event;
 import ru.practicum.model.event.NewEvent;
-import ru.practicum.model.event.UpdateEventAdminRequest;
-import ru.practicum.model.event.UpdateEventUserRequest;
+import ru.practicum.model.event.UpdateEventRequest;
 import ru.practicum.model.state.State;
 import ru.practicum.model.state.StateAction;
 import ru.practicum.model.user.User;
@@ -100,7 +99,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public Event updateEventByAdmin(Long id, UpdateEventAdminRequest updateEventAdminRequest) {
+    public Event updateEventByAdmin(Long id, UpdateEventRequest updateEventAdminRequest) {
         if (updateEventAdminRequest.getEventDate() != null) {
             LocalDateTime createdOn = DateFormatter.toLocalDateTime(updateEventAdminRequest.getEventDate());
             checkEventDate(createdOn);
@@ -134,7 +133,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event updateEventByUser(Long userId, Long eventId, UpdateEventUserRequest updateEvent) {
+    public Event updateEventByUser(Long userId, Long eventId, UpdateEventRequest updateEvent) {
         if (updateEvent.getEventDate() != null) {
             LocalDateTime createdOn = DateFormatter.toLocalDateTime(updateEvent.getEventDate());
             checkEventDate(createdOn);

@@ -8,7 +8,7 @@ import ru.practicum.BaseClient;
 @Configuration
 public class StatsClientConfiguration {
     @Bean
-    public BaseClient baseClient(@Value("http://stats-server:9090") String statsServerUrl) {
+    public BaseClient baseClient(@Value("http://localhost:9090") String statsServerUrl) {
         return new BaseClient(statsServerUrl);
     }
 }

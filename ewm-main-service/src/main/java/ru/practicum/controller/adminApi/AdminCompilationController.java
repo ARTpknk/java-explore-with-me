@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.compilation.CompilationDto;
 import ru.practicum.dto.compilation.NewCompilationDto;
-import ru.practicum.dto.compilation.UpdateCompilationRequest;
 import ru.practicum.exception.ExploreWithMeNotFoundException;
 import ru.practicum.mapper.CompilationMapper;
 import ru.practicum.model.compilation.NewCompilation;
@@ -41,10 +40,10 @@ public class AdminCompilationController {
 
     @PatchMapping("/{compId}")
     public CompilationDto updateCompilation(@PathVariable("compId") Long id,
-                                            @Valid @RequestBody UpdateCompilationRequest updateCompilationRequest) {
+                                            @Valid @RequestBody NewCompilationDto updateCompilationRequest) {
 
         return CompilationMapper.toCompilationDto(compilationService.updateCompilation(id,
-                CompilationMapper.toUpdateCompilation(updateCompilationRequest)));
+                CompilationMapper.toNewCompilation(updateCompilationRequest)));
     }
 
 
