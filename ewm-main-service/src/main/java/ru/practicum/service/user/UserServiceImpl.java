@@ -48,4 +48,38 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public void addSubscription(Long id) {
+        User user = getUserById(id);
+        user.setSubscriptions(user.getSubscriptions() + 1);
+        repository.save(user);
+    }
+
+    @Override
+    public void addSubscriber(Long id) {
+        User user = getUserById(id);
+        user.setSubscribers(user.getSubscribers() + 1);
+        repository.save(user);
+    }
+
+    @Override
+    public void deleteSubscription(Long id) {
+        User user = getUserById(id);
+        int subscriptions = user.getSubscriptions();
+        if (subscriptions > 0) {
+            user.setSubscriptions(user.getSubscriptions() - 1);
+            repository.save(user);
+        }
+    }
+
+    @Override
+    public void deleteSubscriber(Long id) {
+        User user = getUserById(id);
+        int subscribers = user.getSubscribers();
+        if (subscribers > 0) {
+            user.setSubscribers(user.getSubscribers() - 1);
+            repository.save(user);
+        }
+    }
 }

@@ -28,6 +28,7 @@ public interface EventService {
     Event updateEventByUser(Long userId, Long eventId, UpdateEventRequest updateEventDto);
 
     List<Event> getAllEventsByAdmin(EventFilter eventFilter);
+    List<Event> getAllEvents(EventFilter eventFilter);
 
     List<Event> getAllEventsByPublic(EventFilter eventFilter, String uri, String ip);
 
