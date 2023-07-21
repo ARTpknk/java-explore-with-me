@@ -8,6 +8,7 @@ import ru.practicum.repository.StatsRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -20,19 +21,18 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public List<Stats> get(LocalDateTime start, LocalDateTime end, List<String> uri, Boolean unique) {
-        System.out.println("Прошёл контроллер");
+    public List<Stats> get(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         if (unique) {
-            if (uri == null) {
+            if (Objects.equals(uris.get(0), "/events") && uris.size() == 1) {
                 return statsRepository.findUniqueWithoutUris(start, end);
             } else {
-                return statsRepository.findUniqueWithUris(start, end, uri);
+                return statsRepository.findUniqueWithUris(start, end, uris);
             }
         } else {
-            if (uri == null) {
+            if (Objects.equals(uris.get(0), "/events") && uris.size() == 1) {
                 return statsRepository.findNotUniqueWithoutUris(start, end);
             } else {
-                return statsRepository.findNotUniqueWithUris(start, end, uri);
+                return statsRepository.findNotUniqueWithUris(start, end, uris);
             }
         }
     }

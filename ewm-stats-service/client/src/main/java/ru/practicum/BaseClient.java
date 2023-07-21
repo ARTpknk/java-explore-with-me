@@ -10,9 +10,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Slf4j
-public abstract class BaseClient {
-    WebClient webClient = WebClient.create("http://localhost:9090");
+public class BaseClient {
+    private final WebClient webClient;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    public BaseClient(String url) {
+        this.webClient = WebClient.create(url);
+    }
 
     public void postRequest(String app, String path, String ip, LocalDateTime time) {
         HitDto dto = HitDto.builder()
@@ -21,6 +25,7 @@ public abstract class BaseClient {
                 .ip(ip)
                 .timestamp(time.format(formatter))
                 .build();
+        System.out.println("dto " + dto);
 
         webClient
                 .post()
