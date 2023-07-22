@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.subscription.SubscriptionDto;
-import ru.practicum.dto.user.UserShortDto;
+import ru.practicum.dto.user.UserDto;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.mapper.SubscriptionMapper;
 import ru.practicum.mapper.UserMapper;
@@ -37,11 +37,11 @@ public class PrivateSubscriptionController {
     }
 
     @GetMapping
-    public List<UserShortDto> getSubscribes(@PathVariable("userId") Long subscriberId,
-                                            @RequestParam(required = false, defaultValue = "0") int from,
-                                            @RequestParam(required = false, defaultValue = "10") int size) {
+    public List<UserDto> getSubscribes(@PathVariable("userId") Long subscriberId,
+                                       @RequestParam(required = false, defaultValue = "0") int from,
+                                       @RequestParam(required = false, defaultValue = "10") int size) {
         return subscriptionService.getSubscribes(subscriberId, from, size)
-                .stream().map(UserMapper::toUserShortDto).collect(Collectors.toList());
+                .stream().map(UserMapper::toUserDto).collect(Collectors.toList());
     }
 
     @GetMapping("/events")
@@ -53,10 +53,10 @@ public class PrivateSubscriptionController {
     }
 
     @GetMapping("/subscribers")
-    public List<UserShortDto> getSubscribers(@PathVariable("userId") Long creatorId,
-                                             @RequestParam(required = false, defaultValue = "0") int from,
-                                             @RequestParam(required = false, defaultValue = "10") int size) {
+    public List<UserDto> getSubscribers(@PathVariable("userId") Long creatorId,
+                                        @RequestParam(required = false, defaultValue = "0") int from,
+                                        @RequestParam(required = false, defaultValue = "10") int size) {
         return subscriptionService.getSubscribers(creatorId, from, size)
-                .stream().map(UserMapper::toUserShortDto).collect(Collectors.toList());
+                .stream().map(UserMapper::toUserDto).collect(Collectors.toList());
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.dto.event.EventFilter;
 import ru.practicum.exception.ExploreWithMeConflictException;
 import ru.practicum.model.event.Event;
+import ru.practicum.model.state.State;
 import ru.practicum.model.subscription.Subscription;
 import ru.practicum.model.user.User;
 import ru.practicum.repository.SubscriptionRepository;
@@ -94,7 +95,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     public List<Event> getSubscribedEvents(Long subscriberId, int from, int size) {
         Long[] creatorsArray = repository.findAllBySubscriberId(subscriberId)
                 .stream().map(Subscription::getCreatorId).toArray(Long[]::new);
+        String[] states = new String[1];
+        states[0] = State.PUBLISHED.toString();
         EventFilter filter = EventFilter.builder()
+                .states(states)
                 .users(creatorsArray)
                 .from(from)
                 .size(size)

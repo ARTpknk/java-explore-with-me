@@ -2,7 +2,7 @@ package ru.practicum.dto.subscription;
 
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.dto.user.UserShortDto;
+import ru.practicum.dto.user.UserDto;
 
 import javax.validation.constraints.NotNull;
 
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 public class SubscriptionDto {
     private Long id;
     @NotNull
-    private UserShortDto subscriber;
+    private UserDto subscriber;
     @NotNull
-    private UserShortDto creator;   //создатель объявлений
+    private UserDto creator;   //создатель объявлений
 }
