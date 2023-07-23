@@ -32,7 +32,11 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             throw new ExploreWithMeConflictException("нельзя подписаться на самого себя");
         }
         if (!isSubscriptionExists(subscriberId, creatorId)) {
-            Subscription subscription = Subscription.builder().subscriberId(subscriberId).creatorId(creatorId).build();
+            Subscription subscription = Subscription.builder()
+                    .subscriberId(subscriberId)
+                    .creatorId(creatorId)
+                    .build();
+
             userService.addSubscription(subscriberId);
             userService.addSubscriber(creatorId);
             repository.save(subscription);
@@ -75,26 +79,36 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Override
     public List<User> getSubscribes(Long subscriberId, int from, int size) {
         return repository.findAllBySubscriberId(subscriberId, PageRequest.of(from, size))
-                .stream().map((this::addUsers)).map(Subscription::getCreator).collect(Collectors.toList());
+                .stream()
+                .map((this::addUsers))
+                .map(Subscription::getCreator)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<User> getSubscribers(Long creatorId, int from, int size) {
         return repository.findAllByCreatorId(creatorId, PageRequest.of(from, size))
-                .stream().map((this::addUsers)).map(Subscription::getSubscriber).collect(Collectors.toList());
+                .stream()
+                .map((this::addUsers))
+                .map(Subscription::getSubscriber)
+                .collect(Collectors.toList());
     }
 
     @Override
     public Subscription addUsers(Subscription subscription) {
-        subscription.setSubscriber(userService.getUserById(subscription.getSubscriberId()));
-        subscription.setCreator(userService.getUserById(subscription.getCreatorId()));
+        User subscriber = userService.getUserById(subscription.getSubscriberId());
+        User creator = userService.getUserById(subscription.getCreatorId());
+        subscription.setSubscriber(subscriber);
+        subscription.setCreator(creator);
         return subscription;
     }
 
     @Override
     public List<Event> getSubscribedEvents(Long subscriberId, int from, int size) {
         Long[] creatorsArray = repository.findAllBySubscriberId(subscriberId)
-                .stream().map(Subscription::getCreatorId).toArray(Long[]::new);
+                .stream()
+                .map(Subscription::getCreatorId)
+                .toArray(Long[]::new);
         String[] states = new String[1];
         states[0] = State.PUBLISHED.toString();
         EventFilter filter = EventFilter.builder()

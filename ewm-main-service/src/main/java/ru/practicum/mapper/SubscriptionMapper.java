@@ -10,8 +10,8 @@ public class SubscriptionMapper {
     public SubscriptionDto toSubscriptionDto(Subscription subscription) {
         return SubscriptionDto.builder()
                 .id(subscription.getId())
-                .subscriber(UserMapper.toUserDto(subscription.getSubscriber()))
-                .creator(UserMapper.toUserDto(subscription.getCreator()))
+                .subscriberId(subscription.getSubscriberId())
+                .creatorId(subscription.getCreatorId())
                 .build();
     }
 }

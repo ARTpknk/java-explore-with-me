@@ -41,7 +41,9 @@ public class PrivateSubscriptionController {
                                        @RequestParam(required = false, defaultValue = "0") int from,
                                        @RequestParam(required = false, defaultValue = "10") int size) {
         return subscriptionService.getSubscribes(subscriberId, from, size)
-                .stream().map(UserMapper::toUserDto).collect(Collectors.toList());
+                .stream()
+                .map(UserMapper::toUserDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/events")
@@ -49,7 +51,9 @@ public class PrivateSubscriptionController {
                                                    @RequestParam(required = false, defaultValue = "0") int from,
                                                    @RequestParam(required = false, defaultValue = "10") int size) {
         return subscriptionService.getSubscribedEvents(subscriberId, from, size)
-                .stream().map(EventMapper::fromEventToEventShortDto).collect(Collectors.toList());
+                .stream()
+                .map(EventMapper::fromEventToEventShortDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/subscribers")
@@ -57,6 +61,8 @@ public class PrivateSubscriptionController {
                                         @RequestParam(required = false, defaultValue = "0") int from,
                                         @RequestParam(required = false, defaultValue = "10") int size) {
         return subscriptionService.getSubscribers(creatorId, from, size)
-                .stream().map(UserMapper::toUserDto).collect(Collectors.toList());
+                .stream()
+                .map(UserMapper::toUserDto)
+                .collect(Collectors.toList());
     }
 }
