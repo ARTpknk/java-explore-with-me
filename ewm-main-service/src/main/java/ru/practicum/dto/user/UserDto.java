@@ -18,4 +18,6 @@ public class UserDto {
     @NotBlank
     @Size(min = 6, max = 254)
     private String email;
+    private int subscribers;
+    private int subscriptions;
 }

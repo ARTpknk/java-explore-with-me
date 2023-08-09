@@ -29,6 +29,8 @@ public interface EventService {
 
     List<Event> getAllEventsByAdmin(EventFilter eventFilter);
 
+    List<Event> getAllEvents(EventFilter eventFilter);
+
     List<Event> getAllEventsByPublic(EventFilter eventFilter, String uri, String ip);
 
     Event getEventByIdByPublicRequest(Long id, String uri, String ip);

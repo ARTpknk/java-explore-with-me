@@ -65,8 +65,6 @@ public class Event {
     @Transient
     int views;
 
-
-
     public Event() {
     }
 

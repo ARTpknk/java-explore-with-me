@@ -14,4 +14,12 @@ public interface UserService {
     User getUserById(Long id);
 
     void deleteUserById(Long id);
+
+    void addSubscription(Long id);
+
+    void addSubscriber(Long id);
+
+    void deleteSubscription(Long id);
+
+    void deleteSubscriber(Long id);
 }

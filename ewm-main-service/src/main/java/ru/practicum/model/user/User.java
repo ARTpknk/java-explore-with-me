@@ -18,6 +18,10 @@ public class User {
     private String name;
     @Column(name = "user_email", length = 512, nullable = false, unique = true)
     private String email;
+    @Column(name = "subscribers", nullable = false)
+    private int subscribers;
+    @Column(name = "subscriptions", nullable = false)
+    private int subscriptions;
 
     User() {
     }
@@ -26,5 +30,13 @@ public class User {
         this.id = id;
         this.name = name;
         this.email = email;
+    }
+
+    public User(Long id, String name, String email, int subscribers, int subscriptions) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.subscribers = subscribers;
+        this.subscriptions = subscriptions;
     }
 }

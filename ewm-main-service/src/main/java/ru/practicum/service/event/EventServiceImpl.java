@@ -179,6 +179,16 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<Event> getAllEvents(EventFilter eventFilter) {
+
+        EventSpecification specification = new EventSpecification(eventFilter, clock);
+
+        PageRequest pageRequest = PageRequest.of(eventFilter.getFrom() / eventFilter.getSize(),
+                eventFilter.getSize());
+        return repository.findAll(specification, pageRequest).getContent();
+    }
+
+    @Override
     public List<Event> getAllEventsByPublic(EventFilter eventFilter, String uri, String ip) {
         Long[] categories = eventFilter.getCategories();
         if (eventFilter.getCategories() != null) {

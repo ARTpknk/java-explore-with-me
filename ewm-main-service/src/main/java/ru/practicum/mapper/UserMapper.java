@@ -13,6 +13,8 @@ public class UserMapper {
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
+                .subscribers(user.getSubscribers())
+                .subscriptions(user.getSubscriptions())
                 .build();
     }
 
