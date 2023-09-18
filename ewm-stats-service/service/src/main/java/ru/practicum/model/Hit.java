@@ -1,7 +1,9 @@
 package ru.practicum.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 @Table(name = "hit")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 
 public class Hit {
     @Id
@@ -24,15 +28,4 @@ public class Hit {
     private String ip;
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp;
-
-    Hit() {
-    }
-
-    public Hit(Long id, String app, String uri, String ip, LocalDateTime timestamp) {
-        this.id = id;
-        this.app = app;
-        this.uri = uri;
-        this.ip = ip;
-        this.timestamp = timestamp;
-    }
 }

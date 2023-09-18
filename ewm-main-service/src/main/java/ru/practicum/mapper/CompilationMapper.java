@@ -31,7 +31,6 @@ public class CompilationMapper {
     }
 
     public Compilation updateCompilation(Compilation compilation, NewCompilation updateCompilation) {
-
         if (updateCompilation.getPinned() != null) {
             compilation.setPinned(updateCompilation.getPinned());
         }

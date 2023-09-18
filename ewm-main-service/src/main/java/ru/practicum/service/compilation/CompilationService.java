@@ -15,6 +15,4 @@ public interface CompilationService {
     Compilation updateCompilation(Long id, NewCompilation updateCompilation);
 
     List<Compilation> getCompilations(int from, int size, Boolean pinned);
-
-
 }

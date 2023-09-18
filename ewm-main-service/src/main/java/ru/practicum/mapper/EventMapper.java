@@ -188,7 +188,6 @@ public class EventMapper {
                 .build();
     }
 
-
     @Transactional
     Location toLocation(LocationDto locationDto) {
         return Location.builder()

@@ -2,10 +2,9 @@ package ru.practicum.model.event;
 
 import lombok.*;
 import ru.practicum.model.category.Category;
+import ru.practicum.model.location.Location;
 import ru.practicum.model.state.State;
 import ru.practicum.model.user.User;
-import ru.practicum.model.location.Location;
-
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,6 +13,8 @@ import java.time.LocalDateTime;
 @Table(name = "events")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Event {
 
     @Id
@@ -64,29 +65,4 @@ public class Event {
     @With
     @Transient
     int views;
-
-    public Event() {
-    }
-
-    public Event(Long id, String annotation, Category category, int confirmedRequests, LocalDateTime createdOn,
-                 String description, LocalDateTime eventDate, User initiator, Location location, Boolean paid,
-                 int participantLimit, LocalDateTime publishedOn, Boolean requestModeration, State state, String title,
-                 int views) {
-        this.id = id;
-        this.annotation = annotation;
-        this.category = category;
-        this.confirmedRequests = confirmedRequests;
-        this.createdOn = createdOn;
-        this.description = description;
-        this.eventDate = eventDate;
-        this.initiator = initiator;
-        this.location = location;
-        this.paid = paid;
-        this.participantLimit = participantLimit;
-        this.publishedOn = publishedOn;
-        this.requestModeration = requestModeration;
-        this.state = state;
-        this.title = title;
-        this.views = views;
-    }
 }

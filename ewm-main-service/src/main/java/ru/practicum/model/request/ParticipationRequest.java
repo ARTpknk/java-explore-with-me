@@ -1,8 +1,6 @@
 package ru.practicum.model.request;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.With;
+import lombok.*;
 import ru.practicum.model.event.Event;
 import ru.practicum.model.user.User;
 
@@ -13,6 +11,8 @@ import java.time.LocalDateTime;
 @Table(name = "requests")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ParticipationRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,15 +30,4 @@ public class ParticipationRequest {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     RequestStatus status;
-
-    public ParticipationRequest() {
-    }
-
-    public ParticipationRequest(Long id, Event event, User requester, LocalDateTime created, RequestStatus status) {
-        this.id = id;
-        this.event = event;
-        this.requester = requester;
-        this.created = created;
-        this.status = status;
-    }
 }

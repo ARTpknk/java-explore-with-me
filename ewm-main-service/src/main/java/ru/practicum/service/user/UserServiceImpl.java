@@ -34,7 +34,6 @@ public class UserServiceImpl implements UserService {
         return repository.findAll(PageRequest.of(from, size)).toList();
     }
 
-
     @Override
     public User getUserById(Long id) {
         if (repository.findById(id).isPresent()) {

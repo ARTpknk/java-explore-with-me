@@ -12,7 +12,6 @@ import ru.practicum.mapper.StatsMapper;
 import ru.practicum.service.StatsService;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 public class StatsController {
 
     private final StatsService statsService;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)

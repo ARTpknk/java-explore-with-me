@@ -1,7 +1,9 @@
 package ru.practicum.model.subscription;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.model.user.User;
 
 import javax.persistence.*;
@@ -10,6 +12,8 @@ import javax.persistence.*;
 @Table(name = "subscriptions")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,21 +27,4 @@ public class Subscription {
     private User subscriber;
     @Transient
     private User creator;   //создатель объявлений
-
-    public Subscription() {
-    }
-
-    public Subscription(Long id, Long subscriberId, Long creatorId, User subscriber, User creator) {
-        this.id = id;
-        this.subscriberId = subscriberId;
-        this.creatorId = creatorId;
-        this.subscriber = subscriber;
-        this.creator = creator;
-    }
-
-    public Subscription(Long id, Long subscriberId, Long creatorId) {
-        this.id = id;
-        this.subscriberId = subscriberId;
-        this.creatorId = creatorId;
-    }
 }

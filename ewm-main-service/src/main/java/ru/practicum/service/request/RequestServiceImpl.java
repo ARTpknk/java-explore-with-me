@@ -11,7 +11,6 @@ import ru.practicum.model.event.EventRequestStatusUpdateResult;
 import ru.practicum.model.request.ParticipationRequest;
 import ru.practicum.model.request.RequestStatus;
 import ru.practicum.model.state.State;
-import ru.practicum.model.user.User;
 import ru.practicum.repository.RequestRepository;
 import ru.practicum.service.event.EventService;
 import ru.practicum.service.user.UserService;
@@ -20,7 +19,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -59,7 +57,6 @@ public class RequestServiceImpl implements RequestService {
         }
 
         if (event.getConfirmedRequests() < event.getParticipantLimit()) {
-
             if (event.getRequestModeration()) {
                 request = ParticipationRequest.builder()
                         .event(eventService.getEventById(eventId))
@@ -90,18 +87,12 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ParticipationRequest> getRequestsOfEvent(Long userId, Long eventId) {
-        /*if(!eventService.getEventById(eventId).getInitiator().getId().equals(userId)){
-            throw new ExploreWithMeConflictException("not your event";
-        }
-        будет ли в тестах это
-         */
         return repository.findByEventId(eventId);
     }
 
     @Override
     public ParticipationRequest cancelRequest(Long userId, Long requestId) {
         ParticipationRequest request = getRequestById(requestId);
-        User user = userService.getUserById(userId);
         Event event = eventService.getEventById(request.getEvent().getId());
         if (request.getRequester().getId().equals(userId)) {
             request.setStatus(RequestStatus.CANCELED);
@@ -127,10 +118,9 @@ public class RequestServiceImpl implements RequestService {
                                                          Long eventId,
                                                          EventRequestStatusUpdateRequest answer) {
         RequestStatus status = answer.getStatus();
-        List<ParticipationRequest> updatedRequests;
         if (answer.getStatus() == RequestStatus.CONFIRMED || answer.getStatus() == RequestStatus.REJECTED) {
-            answer.getRequestIds().stream()
-                    .map((Long requestId) -> updateRequest(requestId, status, eventId)).collect(Collectors.toList());
+            answer.getRequestIds()
+                    .forEach((Long requestId) -> updateRequest(requestId, status, eventId));
             return EventRequestStatusUpdateResult.builder()
                     .confirmedRequests(repository.findByEventIdAndStatus(eventId, RequestStatus.CONFIRMED))
                     .rejectedRequests(repository.findByEventIdAndStatus(eventId, RequestStatus.REJECTED))
@@ -141,7 +131,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Transactional
-    public ParticipationRequest updateRequest(Long id, RequestStatus status, Long eventId) {
+    public void updateRequest(Long id, RequestStatus status, Long eventId) {
         ParticipationRequest request = getRequestById(id);
         if (request.getStatus() == RequestStatus.PENDING) {
             if (status == RequestStatus.CONFIRMED) {
@@ -155,7 +145,7 @@ public class RequestServiceImpl implements RequestService {
             } else {
                 request.setStatus(RequestStatus.REJECTED);
             }
-            return repository.save(request);
+            repository.save(request);
         } else {
             throw new ExploreWithMeConflictException("Заявка уже обработана");
         }

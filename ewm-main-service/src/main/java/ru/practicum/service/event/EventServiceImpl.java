@@ -94,7 +94,6 @@ public class EventServiceImpl implements EventService {
         } catch (Exception e) {
             throw new ExploreWithMeConflictException("Передан несуществующий event");
         }
-
     }
 
     @Override
@@ -169,7 +168,6 @@ public class EventServiceImpl implements EventService {
         PageRequest pageRequest = PageRequest.of(eventFilter.getFrom() / eventFilter.getSize(),
                 eventFilter.getSize());
 
-
         List<Event> events = repository.findAll(specification, pageRequest).getContent();
         if (events.isEmpty()) {
             return Collections.emptyList();
@@ -180,7 +178,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> getAllEvents(EventFilter eventFilter) {
-
         EventSpecification specification = new EventSpecification(eventFilter, clock);
 
         PageRequest pageRequest = PageRequest.of(eventFilter.getFrom() / eventFilter.getSize(),
