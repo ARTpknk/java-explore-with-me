@@ -43,8 +43,7 @@ public class EventServiceImpl implements EventService {
 
     @Value("ewm-stats-service")
     private String app;
-
-
+    
     @Override
     @Transactional
     public Event createEvent(Long userId, NewEvent newEvent) {

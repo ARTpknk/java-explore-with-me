@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class PublicEventController {
     private final EventService eventService;
 
-    @GetMapping()
+    @GetMapping
     public List<EventFullDto> getEvents(@Valid EventFilter eventFilter, HttpServletRequest httpServletRequest) {
         return eventService.getAllEventsByPublic(eventFilter, httpServletRequest.getRequestURI(),
                         httpServletRequest.getRemoteAddr()).stream()

@@ -25,7 +25,7 @@ public class RequestController {
         return RequestMapper.toParticipationRequestDto(requestService.createRequest(userId, eventId));
     }
 
-    @GetMapping()
+    @GetMapping
     public List<ParticipationRequestDto> getRequestsOfUser(@PathVariable("userId") Long userId) {
         return requestService.getRequestsOfUser(userId)
                 .stream().map(RequestMapper::toParticipationRequestDto)
