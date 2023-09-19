@@ -35,6 +35,15 @@ __Stats-service__ - сервис для сбора статистики (кол�
 
 
 
+![Снимок экрана (3)](https://github.com/ARTpknk/java-explore-with-me/assets/108333044/e2e1a01c-9177-4e91-9dca-1c81c2b6ac59)
+
+
+
+
+![Снимок экрана (2)](https://github.com/ARTpknk/java-explore-with-me/assets/108333044/568c5cac-21a5-402a-b03b-9072d138058f)
+
+
+
 
 
 
