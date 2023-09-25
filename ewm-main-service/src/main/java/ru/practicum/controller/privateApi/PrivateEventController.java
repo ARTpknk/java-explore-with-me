@@ -61,7 +61,6 @@ public class PrivateEventController {
                                                             @PathVariable("eventId") Long eventId) {
         return requestService.getRequestsOfEvent(userId, eventId).stream().map(RequestMapper::toParticipationRequestDto)
                 .collect(Collectors.toList());
-
     }
 
     @PatchMapping("/{eventId}/requests")
@@ -70,6 +69,5 @@ public class PrivateEventController {
                                                            @PathVariable("eventId") Long eventId) {
         EventRequestStatusUpdateRequest answer = EventMapper.toEventRequestStatusUpdateRequest(answerDto);
         return EventMapper.toEventRequestStatusUpdateResultDto(requestService.updateRequests(userId, eventId, answer));
-
     }
 }

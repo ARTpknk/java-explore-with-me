@@ -118,7 +118,7 @@ public class RequestServiceImpl implements RequestService {
                                                          Long eventId,
                                                          EventRequestStatusUpdateRequest answer) {
         RequestStatus status = answer.getStatus();
-        if (answer.getStatus() == RequestStatus.CONFIRMED || answer.getStatus() == RequestStatus.REJECTED) {
+        if (status == RequestStatus.CONFIRMED || status == RequestStatus.REJECTED) {
             answer.getRequestIds()
                     .forEach((Long requestId) -> updateRequest(requestId, status, eventId));
             return EventRequestStatusUpdateResult.builder()
