@@ -61,6 +61,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> getCategories(int from, int size) {
-        return repository.findAll(PageRequest.of(from, size)).toList();
+        return repository.findAllOrderById(PageRequest.of(from, size)).toList();
     }
 }
