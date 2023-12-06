@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 @Transactional
 @SpringBootTest(
-        properties = "db.name=test",
+        properties = "db.name=userServiceTest",
         webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 
