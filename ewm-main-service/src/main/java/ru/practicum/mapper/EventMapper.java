@@ -32,14 +32,14 @@ public class EventMapper {
     }
 
     @Transactional
-    public Event fromNewEventToEvent(NewEvent newEvent, Category category, User user, LocalDateTime createdOn) {
+    public Event fromNewEventToEvent(NewEvent newEvent, Category category, User user, LocalDateTime eventDate) {
         return Event.builder()
                 .annotation(newEvent.getAnnotation())
                 .category(category)
                 .confirmedRequests(0)
                 .createdOn(LocalDateTime.now())
                 .description(newEvent.getDescription())
-                .eventDate(createdOn)
+                .eventDate(eventDate)
                 .initiator(user)
                 .location(newEvent.getLocation())
                 .paid(newEvent.getPaid())

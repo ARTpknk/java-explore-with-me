@@ -43,15 +43,15 @@ public class EventServiceImpl implements EventService {
 
     @Value("ewm-stats-service")
     private String app;
-    
+
     @Override
     @Transactional
     public Event createEvent(Long userId, NewEvent newEvent) {
-        LocalDateTime createdOn = DateFormatter.toLocalDateTime(newEvent.getEventDate());
-        checkEventDate(createdOn);
+        LocalDateTime eventDate = DateFormatter.toLocalDateTime(newEvent.getEventDate());
+        checkEventDate(eventDate);
         User user = userService.getUserById(userId);
         Category category = categoryService.getCategoryById(newEvent.getCategory());
-        return repository.save(EventMapper.fromNewEventToEvent(newEvent, category, user, createdOn));
+        return repository.save(EventMapper.fromNewEventToEvent(newEvent, category, user, eventDate));
     }
 
     @Override
@@ -245,7 +245,7 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    private List<Event> getViews(List<Event> events, String uri) {
+    List<Event> getViews(List<Event> events, String uri) {
         if (events.isEmpty()) {
             return events;
         }
