@@ -65,22 +65,46 @@ public class EventServiceTest {
         categoryService.createCategory(category);
 
         Location location = new Location(10.1F, 10.1F);
-
-        NewEvent newEvent1 = NewEvent.builder().annotation("Футбол").category(1L).description("Футбол в мороз")
-                .eventDate(eventDate1).location(location).paid(true)
-                .participantLimit(100).requestModeration(true).title("Футбол").build();
         Event event1 = new Event(1L, "Футбол", category, 0, LocalDateTime.now(),
                 "Футбол в мороз", DateFormatter.toLocalDateTime(eventDate1), user2, location, true,
                 100, LocalDateTime.now().plusSeconds(3), true, State.PENDING,
                 "Футбол", 0);
 
-        NewEvent newEvent2 = NewEvent.builder().annotation("Баскетбол").category(1L).description("Баскетбол в тепле")
-                .eventDate(eventDate2).location(location).paid(false)
-                .participantLimit(100).requestModeration(false).title("Баскетбол").build();
+        NewEvent newEvent1 = NewEvent.builder()
+                .annotation("Футбол")
+                .category(1L)
+                .description("Футбол в мороз")
+                .eventDate(eventDate1)
+                .location(location)
+                .paid(true)
+                .participantLimit(100)
+                .requestModeration(true)
+                .title("Футбол")
+                .build();
 
-        NewEvent newEvent3 = NewEvent.builder().annotation("Гольф").category(1L).description("Спорт для богатых")
-                .eventDate(eventDate3).location(location).paid(true)
-                .participantLimit(3).requestModeration(true).title("Гольф").build();
+        NewEvent newEvent2 = NewEvent.builder()
+                .annotation("Баскетбол")
+                .category(1L)
+                .description("Баскетбол в тепле")
+                .eventDate(eventDate2)
+                .location(location).
+                paid(false)
+                .participantLimit(100)
+                .requestModeration(false)
+                .title("Баскетбол")
+                .build();
+
+        NewEvent newEvent3 = NewEvent.builder()
+                .annotation("Гольф")
+                .category(1L)
+                .description("Спорт для богатых")
+                .eventDate(eventDate3)
+                .location(location)
+                .paid(true)
+                .participantLimit(3)
+                .requestModeration(true)
+                .title("Гольф")
+                .build();
 
         Event review1Event1 = service.createEvent(id2, newEvent1);
 
@@ -120,8 +144,12 @@ public class EventServiceTest {
         ids.add(3L);
         assertThat(events, equalTo(service.getEventsByIds(ids)));
 
-        UpdateEventRequest updateEventRequest = UpdateEventRequest.builder().stateAction(StateAction.PUBLISH_EVENT).build();
-        UpdateEventRequest updateEventRequest2 = UpdateEventRequest.builder().paid(false).build();
+        UpdateEventRequest updateEventRequest = UpdateEventRequest.builder()
+                .stateAction(StateAction.PUBLISH_EVENT)
+                .build();
+        UpdateEventRequest updateEventRequest2 = UpdateEventRequest.builder()
+                .paid(false)
+                .build();
 
         service.updateEventByAdmin(1L, updateEventRequest);
         assertThat(service.getEventById(1L).getState(), equalTo(State.PUBLISHED));

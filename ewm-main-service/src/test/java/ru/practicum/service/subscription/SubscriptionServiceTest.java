@@ -67,9 +67,18 @@ public class SubscriptionServiceTest {
 
         Location location = new Location(10.1F, 10.1F);
 
-        NewEvent newEvent = NewEvent.builder().annotation("Футбол").category(1L).description("Футбол в мороз")
-                .eventDate("2024-12-31 15:10:05").location(location).paid(true)
-                .participantLimit(100).requestModeration(false).title("Футбол").build();
+        NewEvent newEvent = NewEvent.builder()
+                .annotation("Футбол")
+                .category(1L)
+                .description("Футбол в мороз")
+                .eventDate("2024-12-31 15:10:05")
+                .location(location)
+                .paid(true)
+                .participantLimit(100)
+                .requestModeration(false)
+                .title("Футбол")
+                .build();
+
         Event event = new Event(1L, "Футбол", category, 0, LocalDateTime.now(), "Футбол в мороз",
                 LocalDateTime.now().plusDays(3), user2, location, true, 100, LocalDateTime.now().plusSeconds(10), false,
                 State.PUBLISHED, "Футбол", 1);
